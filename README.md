@@ -111,3 +111,30 @@ usually demonstrated at much larger scales, e.g. 7B vs 70B) — worth
 knowing before assuming this method scales favorably just because a
 model is bigger. Output stays fluent at this size too (not broken),
 2.4GB on disk unquantized (22 layers, ~1.26B params).
+
+## `factorize.py` — low-rank factorization (SVD, W ≈ A×B)
+
+Targets the large attention (q/k/v/o_proj) and MLP (gate/up/down_proj)
+linear layers. Same lesson as pruning, rediscovered independently:
+
+**First attempt (batch, uniform 75% keep-fraction across all 168
+target matrices) broke the model catastrophically** — 9509x baseline
+perplexity, worse than any pruning failure. Isolating a single matrix
+first proved the implementation itself was correct (1.03% reconstruction
+error, 1.01x perplexity for one matrix alone) — the failure was a
+compounding effect across 168 simultaneous changes, the exact same
+shape as pruning's batch-removal bug. Fixed the same way: factorize
+one matrix at a time, safest (lowest reconstruction error) first,
+validate perplexity after each, revert on failure.
+
+**A second, separate gotcha, not a bug**: compression from `W ≈ A×B`
+only happens when `k < (in×out)/(in+out)`. For roughly square matrices
+(q_proj/o_proj here, ~896×896) that breakeven is `k < 0.5×d` — a 75%
+keep-fraction is *above* that, making those matrices larger, not
+smaller. It only helps on rectangular matrices (gate/up/down_proj,
+896×4864, breakeven ≈84%). Applying one uniform fraction everywhere
+without accounting for this produced a net -1.8% "reduction" (i.e. the
+model got *bigger*) even though the iterative safety-validation itself
+worked correctly (109/168 matrices accepted, 1.45x baseline
+perplexity). Testing lower fractions, safely under the square-matrix
+breakeven, next.

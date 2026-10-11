@@ -11,3 +11,4 @@
 pruned-*/
 repeat-*/
 gguf-compare/
+.hf-cache/
