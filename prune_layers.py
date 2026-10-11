@@ -29,7 +29,6 @@ trade-off, not an oversight.
 """
 
 import argparse
-import copy
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -110,29 +109,59 @@ def compute_perplexity(model, tokenizer, texts, device: str) -> float:
     return torch.exp(torch.tensor(total_loss / total_tokens)).item()
 
 
-def remove_one_layer(model, index: int):
-    """Mutates model in place, removing the layer at `index`."""
-    layers = list(model.model.layers)
-    del layers[index]
-
-    # Each decoder layer (and its self_attn submodule) is constructed
-    # with a fixed layer_idx baked in at __init__ time, used for KV-cache
-    # indexing. Removing a layer from the list shifts every subsequent
-    # layer's *position*, but its stored layer_idx doesn't automatically
-    # follow - it still has its original value, which then indexes into
-    # a KV-cache sized for the new (smaller) layer count and goes out of
-    # range. Must renumber explicitly to match new positions.
+def _renumber_layer_idx(layers):
     for new_idx, layer in enumerate(layers):
         if hasattr(layer, "layer_idx"):
             layer.layer_idx = new_idx
         if hasattr(layer, "self_attn") and hasattr(layer.self_attn, "layer_idx"):
             layer.self_attn.layer_idx = new_idx
 
-    model.model.layers = torch.nn.ModuleList(layers)
-    model.config.num_hidden_layers = len(layers)
+
+def remove_one_layer(model, index: int):
+    """Mutates model in place, removing the layer at `index`. Returns
+    (removed_module, removed_layer_type) so the caller can restore it
+    with `restore_layer` if this removal gets rejected - this avoids
+    `copy.deepcopy`-ing the whole model per trial, which is fine at
+    0.5-1.5B params but risks OOM at 7B on a 23GB-RAM machine (two full
+    bf16 copies of a 7B model is ~28GB alone, before any working
+    memory)."""
+    layers = list(model.model.layers)
+    removed_module = layers.pop(index)
+
+    layer_types = None
+    removed_layer_type = None
     if getattr(model.config, "layer_types", None) is not None:
         layer_types = list(model.config.layer_types)
-        del layer_types[index]
+        removed_layer_type = layer_types.pop(index)
+        model.config.layer_types = layer_types
+
+    # Each decoder layer (and its self_attn submodule) is constructed
+    # with a fixed layer_idx baked in at __init__ time, used for KV-cache
+    # indexing. Removing a layer shifts every subsequent layer's
+    # *position*, but its stored layer_idx doesn't automatically follow -
+    # it still has its original value, which then indexes into a
+    # KV-cache sized for the new (smaller) layer count and goes out of
+    # range. Must renumber explicitly to match new positions.
+    _renumber_layer_idx(layers)
+
+    model.model.layers = torch.nn.ModuleList(layers)
+    model.config.num_hidden_layers = len(layers)
+    return removed_module, removed_layer_type
+
+
+def restore_layer(model, index: int, removed_module, removed_layer_type):
+    """Undoes `remove_one_layer` - reinserts the module at its original
+    position and renumbers layer_idx again (insertion shifts positions
+    just as removal does)."""
+    layers = list(model.model.layers)
+    layers.insert(index, removed_module)
+    _renumber_layer_idx(layers)
+    model.model.layers = torch.nn.ModuleList(layers)
+    model.config.num_hidden_layers = len(layers)
+
+    if getattr(model.config, "layer_types", None) is not None or removed_layer_type is not None:
+        layer_types = list(model.config.layer_types) if model.config.layer_types else []
+        layer_types.insert(index, removed_layer_type)
         model.config.layer_types = layer_types
 
 
@@ -149,9 +178,8 @@ def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl
 
         accepted = False
         for candidate in ranked:
-            trial = copy.deepcopy(model)
-            remove_one_layer(trial, candidate)
-            trial_ppl = compute_perplexity(trial, tokenizer, VALIDATION_TEXTS, device)
+            removed_module, removed_layer_type = remove_one_layer(model, candidate)
+            trial_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
             ratio = trial_ppl / baseline_ppl
             print(
                 f"  trying to remove layer {candidate} "
@@ -159,7 +187,6 @@ def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl
                 f"perplexity {trial_ppl:.3f} ({ratio:.2f}x baseline)"
             )
             if ratio <= max_ppl_ratio:
-                model = trial
                 removed_count += 1
                 accepted = True
                 print(
@@ -168,6 +195,7 @@ def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl
                 )
                 break
             else:
+                restore_layer(model, candidate, removed_module, removed_layer_type)
                 print("  -> rejected, perplexity too high. Trying next candidate.")
 
         if not accepted:
