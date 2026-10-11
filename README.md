@@ -98,3 +98,16 @@ There's a real structural cliff somewhere between 3x and 10x acceptable
 perplexity degradation on this model — not a smooth gradient. Pushing
 the nominal removal target higher (6 vs 22) doesn't change the ceiling
 at a fixed threshold; confirmed identical stopping point either way.
+
+### Larger base model comparison (Qwen2.5-1.5B, found 2026-10-11)
+
+Same pipeline, same 1.5x threshold, on `Qwen/Qwen2.5-1.5B-Instruct`
+(28 layers vs the 0.5B model's 24): removed 6/28 (21.4%), landing
+within half a percentage point of the 0.5B model's ceiling (5/24,
+20.8%). The "bigger models tolerate proportionally more removal"
+expectation from depth-pruning literature doesn't show up clearly at
+this scale difference (0.5B→1.5B is only a 3x jump; the effect is
+usually demonstrated at much larger scales, e.g. 7B vs 70B) — worth
+knowing before assuming this method scales favorably just because a
+model is bigger. Output stays fluent at this size too (not broken),
+2.4GB on disk unquantized (22 layers, ~1.26B params).
