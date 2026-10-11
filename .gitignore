@@ -12,3 +12,4 @@ pruned-*/
 repeat-*/
 gguf-compare/
 .hf-cache/
+__pycache__/
