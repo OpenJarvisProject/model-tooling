@@ -3,4 +3,11 @@
 *.gguf
 *.safetensors
 *.bin
+# All pruning/conversion output and scratch test directories live
+# under outputs/ by convention - never written at repo root again,
+# after accidentally committing pruned-*/ and repeat-*/ scratch dirs
+# twice already.
+/outputs/
 pruned-*/
+repeat-*/
+gguf-compare/
