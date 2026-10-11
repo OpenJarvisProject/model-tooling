@@ -1,0 +1,4 @@
+{"stage": "start", "params": 494032768, "fp16_mb": 988.1, "val_ppl": 12.603, "test_ppl": 17.594}
+{"stage": "F:1.5625", "params": 485765504, "fp16_mb": 971.5, "val_ppl": 19.484, "test_ppl": 27.194}
+{"stage": "Q4(sim)", "params": 485765504, "est_mb": 273.2, "test_ppl": 40.041}
+{"stage": "Q3(sim)", "params": 485765504, "est_mb": 212.5, "test_ppl": 1508.268}

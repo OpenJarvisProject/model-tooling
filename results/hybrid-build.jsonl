@@ -1,0 +1,5 @@
+{"model": "qwen2.5-3b-hybrid", "base": "IQ2_M", "variant": "base", "mb": 1140.5, "ppl": 12.0491, "ppl_err": 0.25921}
+{"model": "qwen2.5-3b-hybrid", "base": "IQ2_M", "variant": "attn_k\\.weight=iq3_s", "mb": 1142.6, "ppl": 11.9166, "ppl_err": 0.2581, "ppl_gain_per_100mb": 6.31}
+{"model": "qwen2.5-3b-hybrid", "base": "IQ2_M", "variant": "attn_k\\.weight=iq3_s+blk\\.(2[89]|3[0-5])\\.ffn_.*=iq3_s", "mb": 1201.8, "ppl": 10.8577, "ppl_err": 0.22532, "ppl_gain_per_100mb": 1.944}
+{"model": "qwen2.5-3b-hybrid", "base": "IQ2_M", "variant": "attn_k\\.weight=iq3_s+blk\\.(2[89]|3[0-5])\\.ffn_.*=iq3_s+ffn_up\\.weight=iq3_s", "mb": 1270.8, "ppl": 10.202, "ppl_err": 0.20975, "ppl_gain_per_100mb": 1.418}
+{"model": "qwen2.5-3b-hybrid", "base": "IQ2_M", "variant": "blk\\.(2[89]|3[0-5])\\.ffn_.*=iq4_xs+attn_k\\.weight=iq3_s+ffn_up\\.weight=iq3_s", "mb": 1325.8, "ppl": 10.0093, "ppl_err": 0.21024, "ppl_gain_per_100mb": 1.101}

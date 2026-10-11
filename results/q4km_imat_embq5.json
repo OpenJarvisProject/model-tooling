@@ -1,0 +1,110 @@
+{
+  "model": "q4km_imat_embq5",
+  "mb": 346.8,
+  "vs_original": {
+    "mean_kld": 0.031468,
+    "same_top_pct": 90.02,
+    "same_top_err": 0.42
+  },
+  "hellaswag": {
+    "acc": 51.1,
+    "ci95": [
+      48.0035,
+      54.1881
+    ],
+    "n": 1000
+  },
+  "winogrande": {
+    "acc": 56.1957,
+    "err": 1.39,
+    "n": 1267
+  },
+  "arc": {
+    "acc": 47.4108,
+    "err": 1.6948
+  },
+  "mmlu": {
+    "acc": 30.2326,
+    "err": 1.1677
+  },
+  "truthfulqa": {
+    "acc": 25.459,
+    "err": 1.525
+  },
+  "agent": {
+    "scores": {
+      "arith": "5/8",
+      "instruct": "5/8",
+      "tool": "6/8",
+      "router": "5/10"
+    },
+    "total": "21/34",
+    "failures": [
+      {
+        "category": "arith",
+        "prompt": "I have 3 boxes with 7 apples each and eat 5. How many apples are left? Reply with only the number.",
+        "reply": "20"
+      },
+      {
+        "category": "arith",
+        "prompt": "A train leaves at 14:00 and arrives at 17:30. How many minutes is the trip? Reply with only the number.",
+        "reply": "The trip duration from 14:00 to 17:30 is 17:30 - 14:00 = 3 hours and 30 minutes, which is equivalent to 3 * 60 + 30 = 210 minutes. Therefore, the answer is 210 minutes."
+      },
+      {
+        "category": "arith",
+        "prompt": "What is 9 squared minus 19? Reply with only the number.",
+        "reply": "80"
+      },
+      {
+        "category": "instruct",
+        "prompt": "Describe the ocean in exactly three words. Reply with only those three words.",
+        "reply": "Mysterious, vast, and mysterious."
+      },
+      {
+        "category": "instruct",
+        "prompt": "Is the sun a star? Answer with only Yes or No.",
+        "reply": "Yes. The Sun is indeed classified as a star in the context of our solar system and universe. Stars are massive objects that emit light and energy through nuclear fusion reactions within their cores, w"
+      },
+      {
+        "category": "instruct",
+        "prompt": "Repeat the word 'ready' exactly twice, separated by a single space, and nothing else.",
+        "reply": "Ready, ready, to begin."
+      },
+      {
+        "category": "tool",
+        "prompt": "Set a timer for 5 minutes.",
+        "reply": "{\"tool\": \"set_timer(minutes: 5)}"
+      },
+      {
+        "category": "tool",
+        "prompt": "I need a 45 minute timer please.",
+        "reply": "{\"tool\": \"set_timer(minutes: 45)}"
+      },
+      {
+        "category": "router",
+        "prompt": "Hey, how's it going?",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "What's the capital of Canada?",
+        "reply": "categorization"
+      },
+      {
+        "category": "router",
+        "prompt": "Write a Python function that reverses a string.",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Turn the volume up.",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Open Spotify and play my liked songs.",
+        "reply": "reasoning"
+      }
+    ]
+  }
+}

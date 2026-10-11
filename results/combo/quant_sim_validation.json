@@ -1,0 +1,74 @@
+[
+  {
+    "condition": "original",
+    "real_quant": "Q5_K_M",
+    "gguf_mb": 420.1,
+    "test_ppl": 18.131
+  },
+  {
+    "condition": "original",
+    "real_quant": "Q4_K_M",
+    "gguf_mb": 397.8,
+    "test_ppl": 18.207
+  },
+  {
+    "condition": "original",
+    "real_quant": "Q4_0",
+    "gguf_mb": 352.2,
+    "test_ppl": 20.162
+  },
+  {
+    "condition": "original",
+    "real_quant": "Q3_K_M",
+    "gguf_mb": 355.5,
+    "test_ppl": 19.527
+  },
+  {
+    "condition": "original",
+    "real_quant": "Q3_K_S",
+    "gguf_mb": 338.3,
+    "test_ppl": 22.907
+  },
+  {
+    "condition": "original",
+    "real_quant": "Q2_K",
+    "gguf_mb": 338.6,
+    "test_ppl": 22.33
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q5_K_M",
+    "gguf_mb": 375.2,
+    "test_ppl": 26.198
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q4_K_M",
+    "gguf_mb": 356.6,
+    "test_ppl": 26.564
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q4_0",
+    "gguf_mb": 318.6,
+    "test_ppl": 29.769
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q3_K_M",
+    "gguf_mb": 321.4,
+    "test_ppl": 28.603
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q3_K_S",
+    "gguf_mb": 307.0,
+    "test_ppl": 36.292
+  },
+  {
+    "condition": "P",
+    "real_quant": "Q2_K",
+    "gguf_mb": 307.3,
+    "test_ppl": 36.349
+  }
+]

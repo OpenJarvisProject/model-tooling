@@ -1,0 +1,10 @@
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "base", "mb": 1140.5, "ppl": 12.0491, "ppl_err": 0.25921}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "attn_q\\.weight=iq3_s", "mb": 1157.0, "ppl": 11.9114, "ppl_err": 0.25638, "ppl_gain_per_100mb": 0.835}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "attn_k\\.weight=iq3_s", "mb": 1142.6, "ppl": 11.9166, "ppl_err": 0.2581, "ppl_gain_per_100mb": 6.31}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "attn_v\\.weight=q5_K", "mb": 1142.9, "ppl": 12.0232, "ppl_err": 0.2591, "ppl_gain_per_100mb": 1.079}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "attn_output\\.weight=q4_K", "mb": 1160.6, "ppl": 12.1932, "ppl_err": 0.26107, "ppl_gain_per_100mb": -0.717}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "ffn_gate\\.weight=iq3_s", "mb": 1229.3, "ppl": 11.4903, "ppl_err": 0.24796, "ppl_gain_per_100mb": 0.629}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "ffn_up\\.weight=iq3_s", "mb": 1229.3, "ppl": 10.9161, "ppl_err": 0.23022, "ppl_gain_per_100mb": 1.276}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "ffn_down\\.weight=iq3_s", "mb": 1219.4, "ppl": 11.2537, "ppl_err": 0.23744, "ppl_gain_per_100mb": 1.008}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "blk\\.[0-3]\\.ffn_.*=iq3_s", "mb": 1170.1, "ppl": 11.8964, "ppl_err": 0.25595, "ppl_gain_per_100mb": 0.516}
+{"model": "qwen2.5-3b", "base": "IQ2_M", "variant": "blk\\.3[2-5]\\.ffn_.*=iq3_s", "mb": 1170.1, "ppl": 11.4022, "ppl_err": 0.23595, "ppl_gain_per_100mb": 2.185}

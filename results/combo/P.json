@@ -1,0 +1,35 @@
+{
+  "name": "P",
+  "stages": [
+    "P:1.5625"
+  ],
+  "rows": [
+    {
+      "stage": "start",
+      "params": 494032768,
+      "fp16_mb": 988.1,
+      "val_ppl": 12.603,
+      "test_ppl": 17.594
+    },
+    {
+      "stage": "P:1.5625",
+      "params": 434383232,
+      "fp16_mb": 868.8,
+      "val_ppl": 19.099,
+      "test_ppl": 25.479,
+      "stage_seconds": 278
+    },
+    {
+      "stage": "Q4(sim)",
+      "params": 434383232,
+      "est_mb": 244.3,
+      "test_ppl": 33.558
+    },
+    {
+      "stage": "Q3(sim)",
+      "params": 434383232,
+      "est_mb": 190.0,
+      "test_ppl": 249.561
+    }
+  ]
+}

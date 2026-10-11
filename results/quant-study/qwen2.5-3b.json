@@ -1,0 +1,152 @@
+[
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q8_0",
+    "qtype": "Q8_0",
+    "imatrix": false,
+    "token_embd": "default",
+    "mb": 3285.5,
+    "ppl": 8.6405,
+    "ppl_err": 0.17749
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q4_K_M",
+    "qtype": "Q4_K_M",
+    "imatrix": false,
+    "token_embd": "default",
+    "mb": 1929.9,
+    "ppl": 9.1088,
+    "ppl_err": 0.18937
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q4_K_M+imat",
+    "qtype": "Q4_K_M",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1929.9,
+    "ppl": 8.9256,
+    "ppl_err": 0.18499
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q3_K_M",
+    "qtype": "Q3_K_M",
+    "imatrix": false,
+    "token_embd": "default",
+    "mb": 1590.5,
+    "ppl": 15.668,
+    "ppl_err": 0.35072
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q3_K_M+imat",
+    "qtype": "Q3_K_M",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1590.5,
+    "ppl": 13.484,
+    "ppl_err": 0.2982
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q2_K",
+    "qtype": "Q2_K",
+    "imatrix": false,
+    "token_embd": "default",
+    "mb": 1274.8,
+    "ppl": 22244.5083,
+    "ppl_err": 636.10751
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q2_K+imat",
+    "qtype": "Q2_K",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1274.8,
+    "ppl": 11.3633,
+    "ppl_err": 0.24902
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ4_XS+imat",
+    "qtype": "IQ4_XS",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1739.1,
+    "ppl": 8.8806,
+    "ppl_err": 0.18352
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ3_M+imat",
+    "qtype": "IQ3_M",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1488.9,
+    "ppl": 9.514,
+    "ppl_err": 0.19384
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ3_XXS+imat",
+    "qtype": "IQ3_XXS",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1282.8,
+    "ppl": 10.0277,
+    "ppl_err": 0.2099
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ2_M+imat",
+    "qtype": "IQ2_M",
+    "imatrix": true,
+    "token_embd": "default",
+    "mb": 1140.5,
+    "ppl": 12.0491,
+    "ppl_err": 0.25921
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q4_K_M+imat+emb_q6_K",
+    "qtype": "Q4_K_M",
+    "imatrix": true,
+    "token_embd": "q6_K",
+    "mb": 1929.9,
+    "ppl": 8.9256,
+    "ppl_err": 0.18499
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "Q4_K_M+imat+emb_q4_K",
+    "qtype": "Q4_K_M",
+    "imatrix": true,
+    "token_embd": "q4_K",
+    "mb": 1849.7,
+    "ppl": 9.0602,
+    "ppl_err": 0.18829
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ3_M+imat+emb_q6_K",
+    "qtype": "IQ3_M",
+    "imatrix": true,
+    "token_embd": "q6_K",
+    "mb": 1488.9,
+    "ppl": 9.514,
+    "ppl_err": 0.19384
+  },
+  {
+    "model": "qwen2.5-3b",
+    "variant": "IQ3_M+imat+emb_q4_K",
+    "qtype": "IQ3_M",
+    "imatrix": true,
+    "token_embd": "q4_K",
+    "mb": 1408.7,
+    "ppl": 9.675,
+    "ppl_err": 0.19773
+  }
+]

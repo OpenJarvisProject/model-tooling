@@ -1,0 +1,115 @@
+{
+  "model": "original",
+  "mb": 994.2,
+  "hellaswag": {
+    "acc": 50.8,
+    "ci95": [
+      47.7043,
+      53.8896
+    ],
+    "n": 1000
+  },
+  "winogrande": {
+    "acc": 57.3796,
+    "err": 1.39,
+    "n": 1267
+  },
+  "arc": {
+    "acc": 49.8274,
+    "err": 1.6971
+  },
+  "mmlu": {
+    "acc": 30.3618,
+    "err": 1.1691
+  },
+  "truthfulqa": {
+    "acc": 24.9694,
+    "err": 1.5152
+  },
+  "agent": {
+    "scores": {
+      "arith": "5/8",
+      "instruct": "4/8",
+      "tool": "6/8",
+      "router": "4/10"
+    },
+    "total": "19/34",
+    "failures": [
+      {
+        "category": "arith",
+        "prompt": "I have 3 boxes with 7 apples each and eat 5. How many apples are left? Reply with only the number.",
+        "reply": "2"
+      },
+      {
+        "category": "arith",
+        "prompt": "A train leaves at 14:00 and arrives at 17:30. How many minutes is the trip? Reply with only the number.",
+        "reply": "23 hours * 60 minutes/hour = 1560 minutes"
+      },
+      {
+        "category": "arith",
+        "prompt": "What is 9 squared minus 19? Reply with only the number.",
+        "reply": "81"
+      },
+      {
+        "category": "instruct",
+        "prompt": "Describe the ocean in exactly three words. Reply with only those three words.",
+        "reply": "Mysterious, vast, and life-sustaining."
+      },
+      {
+        "category": "instruct",
+        "prompt": "Is the sun a star? Answer with only Yes or No.",
+        "reply": "Yes. The Sun is indeed considered a star due to its luminosity and other characteristics that distinguish it from other stars in our solar system."
+      },
+      {
+        "category": "instruct",
+        "prompt": "List three colors, one per line, with no numbering and no other text.",
+        "reply": "Red, Yellow, Blue"
+      },
+      {
+        "category": "instruct",
+        "prompt": "Repeat the word 'ready' exactly twice, separated by a single space, and nothing else.",
+        "reply": "Ready, ready, to begin!"
+      },
+      {
+        "category": "tool",
+        "prompt": "Set a timer for 5 minutes.",
+        "reply": "{\"tool\": \"set_timer(minutes: int)}"
+      },
+      {
+        "category": "tool",
+        "prompt": "I need a 45 minute timer please.",
+        "reply": "{\"tool\": \"set_timer(minutes: 45)}"
+      },
+      {
+        "category": "router",
+        "prompt": "Hey, how's it going?",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "What's the capital of Canada?",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Write a Python function that reverses a string.",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Why does my Rust code say 'borrowed value does not live long enough'?",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Turn the volume up.",
+        "reply": "reasoning"
+      },
+      {
+        "category": "router",
+        "prompt": "Open Spotify and play my liked songs.",
+        "reply": "reasoning"
+      }
+    ]
+  }
+}

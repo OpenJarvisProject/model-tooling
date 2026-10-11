@@ -1,0 +1,38 @@
+[
+  {
+    "layers": "Q4_K_M",
+    "token_embd": "q5_0",
+    "gguf_mb": 346.8,
+    "test_ppl": 18.392
+  },
+  {
+    "layers": "Q4_K_M",
+    "token_embd": "q4_1",
+    "gguf_mb": 338.2,
+    "test_ppl": 18.844
+  },
+  {
+    "layers": "Q4_K_M",
+    "token_embd": "q4_0",
+    "gguf_mb": 329.7,
+    "test_ppl": 19.042
+  },
+  {
+    "layers": "Q3_K_M",
+    "token_embd": "q5_0",
+    "gguf_mb": 304.4,
+    "test_ppl": 19.716
+  },
+  {
+    "layers": "Q3_K_M",
+    "token_embd": "q4_1",
+    "gguf_mb": 295.9,
+    "test_ppl": 20.276
+  },
+  {
+    "layers": "Q3_K_M",
+    "token_embd": "q4_0",
+    "gguf_mb": 287.4,
+    "test_ppl": 20.476
+  }
+]

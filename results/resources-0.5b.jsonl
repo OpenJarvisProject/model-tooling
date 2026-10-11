@@ -1,0 +1,6 @@
+{"model": "original", "device": "cpu", "file_mb": 994.2, "wall_s": 1.56, "wall_s_sd": 0.01, "peak_rss_mb": 1053.51, "peak_rss_mb_sd": 0.37, "avg_cores": 3.18, "avg_cores_sd": 0.01, "vram_mb": 0.44, "vram_mb_sd": 0.76}
+{"model": "original", "device": "gpu", "file_mb": 994.2, "wall_s": 0.96, "wall_s_sd": 0.01, "peak_rss_mb": 1054.59, "peak_rss_mb_sd": 0.04, "avg_cores": 0.77, "avg_cores_sd": 0.0, "vram_mb": 1333.09, "vram_mb_sd": 1.52}
+{"model": "q4km_imat_embq5", "device": "cpu", "file_mb": 346.8, "wall_s": 0.83, "wall_s_sd": 0.02, "peak_rss_mb": 462.35, "peak_rss_mb_sd": 0.19, "avg_cores": 2.68, "avg_cores_sd": 0.02, "vram_mb": 0.44, "vram_mb_sd": 0.76}
+{"model": "q4km_imat_embq5", "device": "gpu", "file_mb": 346.8, "wall_s": 0.68, "wall_s_sd": 0.0, "peak_rss_mb": 437.0, "peak_rss_mb_sd": 0.22, "avg_cores": 0.79, "avg_cores_sd": 0.0, "vram_mb": 684.18, "vram_mb_sd": 1.32}
+{"model": "iq3m_imat_embq5", "device": "cpu", "file_mb": 291.7, "wall_s": 0.88, "wall_s_sd": 0.02, "peak_rss_mb": 512.51, "peak_rss_mb_sd": 0.09, "avg_cores": 2.66, "avg_cores_sd": 0.03, "vram_mb": 0.44, "vram_mb_sd": 0.76}
+{"model": "iq3m_imat_embq5", "device": "gpu", "file_mb": 291.7, "wall_s": 0.68, "wall_s_sd": 0.02, "peak_rss_mb": 384.64, "peak_rss_mb_sd": 0.05, "avg_cores": 0.8, "avg_cores_sd": 0.01, "vram_mb": 629.01, "vram_mb_sd": 1.32}
