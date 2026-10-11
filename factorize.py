@@ -82,10 +82,13 @@ def factorize_linear(linear: nn.Linear, keep_fraction: float) -> tuple[Factorize
 
 
 def find_target_linears(model):
-    """Returns [(parent_module, submodule_name, linear), ...] for every
-    targeted matrix in the model."""
+    """Returns [(layer_idx, parent_module, parent_name, submodule_name,
+    linear), ...] for every targeted matrix in the model. layer_idx and
+    parent_name are tracked specifically so the exact set of replaced
+    matrices can be saved as metadata and replayed on load - see
+    `load_factorized_model`."""
     targets = []
-    for layer in model.model.layers:
+    for layer_idx, layer in enumerate(model.model.layers):
         for submodule_name in TARGET_SUBMODULE_NAMES:
             for parent_name in ("self_attn", "mlp"):
                 parent = getattr(layer, parent_name, None)
@@ -93,7 +96,7 @@ def find_target_linears(model):
                     continue
                 linear = getattr(parent, submodule_name)
                 if isinstance(linear, nn.Linear):
-                    targets.append((parent, submodule_name, linear))
+                    targets.append((layer_idx, parent, parent_name, submodule_name, linear))
     return targets
 
 
@@ -121,15 +124,19 @@ def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, m
     print(f"Baseline perplexity: {baseline_ppl:.3f}")
 
     targets = find_target_linears(model)
-    scored = [(reconstruction_error(linear, keep_fraction), parent, name, linear) for parent, name, linear in targets]
+    scored = [
+        (reconstruction_error(linear, keep_fraction), layer_idx, parent, parent_name, name, linear)
+        for layer_idx, parent, parent_name, name, linear in targets
+    ]
     scored.sort(key=lambda t: t[0])  # safest (lowest error) first
 
     accepted = 0
     current_ppl = baseline_ppl
     total_original_params = 0
     total_new_params = 0
+    applied = []  # metadata for load_factorized_model: which matrices were actually replaced
 
-    for error, parent, name, linear in scored:
+    for error, layer_idx, parent, parent_name, name, linear in scored:
         factorized, orig_p, new_p = factorize_linear(linear, keep_fraction)
         setattr(parent, name, factorized)
         trial_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
@@ -139,6 +146,9 @@ def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, m
             current_ppl = trial_ppl
             total_original_params += orig_p
             total_new_params += new_p
+            applied.append(
+                {"layer_idx": layer_idx, "parent_name": parent_name, "submodule_name": name, "rank": factorized.first.out_features}
+            )
             print(
                 f"  [{accepted}/{len(scored)} tried] factorized (recon_err={error:.4f}): "
                 f"perplexity now {trial_ppl:.3f} ({ratio:.2f}x baseline) -> kept"
@@ -154,7 +164,53 @@ def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, m
         f"Done: {accepted}/{len(scored)} matrices factorized at keep_fraction={keep_fraction}, "
         f"final perplexity {current_ppl:.3f} ({current_ppl / baseline_ppl:.2f}x baseline)"
     )
-    return total_original_params, total_new_params
+    return total_original_params, total_new_params, applied
+
+
+def apply_factorization_structure(model, applied: list[dict]):
+    """Replaces the listed matrices with correctly-shaped (but
+    untrained/empty) FactorizedLinear modules, matching exactly what
+    factorize_iteratively produced - must be called BEFORE loading a
+    state_dict that was saved from a factorized model. Plain
+    AutoModelForCausalLM.from_pretrained has no idea FactorizedLinear
+    exists, reconstructs the standard architecture, finds the
+    checkpoint's `*.first.weight`/`*.second.weight` keys don't match
+    the expected plain `*.weight` key, and silently random-inits those
+    matrices instead of loading the real trained weights - this is
+    exactly what broke the first saved checkpoint (see README)."""
+    for entry in applied:
+        layer = model.model.layers[entry["layer_idx"]]
+        parent = getattr(layer, entry["parent_name"])
+        linear = getattr(parent, entry["submodule_name"])
+        k = entry["rank"]
+        first = nn.Linear(linear.in_features, k, bias=False)
+        second = nn.Linear(k, linear.out_features, bias=linear.bias is not None)
+        setattr(parent, entry["submodule_name"], FactorizedLinear(first, second))
+
+
+def load_factorized_model(path):
+    """Correct counterpart to the broken plain from_pretrained reload.
+    The weights saved by plain save_pretrained are actually fine -
+    they're stored under the real key names (e.g.
+    `...q_proj.first.weight`) with the real trained values. The only
+    thing broken was the *reload* skeleton: plain from_pretrained
+    builds a standard architecture that doesn't have `.first`/`.second`
+    submodules at all, so those keys never match anything and get
+    silently dropped/randomized. Fix: build the correct skeleton via
+    `apply_factorization_structure` first, then load the same
+    safetensors file into it directly."""
+    import json
+    import os
+
+    from safetensors.torch import load_file
+
+    with open(os.path.join(path, "factorization_metadata.json")) as f:
+        applied = json.load(f)
+    model = AutoModelForCausalLM.from_pretrained(path)
+    apply_factorization_structure(model, applied)
+    state_dict = load_file(os.path.join(path, "model.safetensors"))
+    model.load_state_dict(state_dict)
+    return model
 
 
 def compute_perplexity(model, tokenizer, texts, device: str) -> float:
@@ -194,7 +250,7 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(args.model_id, dtype="auto")
     model.to(device)
 
-    total_original, total_new = factorize_iteratively(
+    total_original, total_new, applied = factorize_iteratively(
         model, tokenizer, device, args.keep_fraction, args.max_ppl_ratio
     )
     if total_original > 0:
@@ -204,9 +260,19 @@ def main():
             f"({reduction * 100:.1f}% reduction in targeted layers)"
         )
 
+    import json
+    import os
+
     model.save_pretrained(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
-    print(f"Saved to {args.output_dir}")
+    with open(os.path.join(args.output_dir, "factorization_metadata.json"), "w") as f:
+        json.dump(applied, f)
+    print(f"Saved to {args.output_dir} ({len(applied)} factorized matrices recorded in metadata)")
+
+    print("Verifying the saved checkpoint actually reloads correctly...")
+    reloaded = load_factorized_model(args.output_dir)
+    reload_ppl = compute_perplexity(reloaded, tokenizer, VALIDATION_TEXTS, device)
+    print(f"Reloaded model perplexity: {reload_ppl:.3f} (should match the in-script final perplexity above)")
 
 
 if __name__ == "__main__":

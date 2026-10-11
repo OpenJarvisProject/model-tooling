@@ -138,3 +138,36 @@ model got *bigger*) even though the iterative safety-validation itself
 worked correctly (109/168 matrices accepted, 1.45x baseline
 perplexity). Testing lower fractions, safely under the square-matrix
 breakeven, next.
+
+### 7B model tested (2026-10-11): less prunable than smaller models, not more
+
+`Qwen/Qwen2.5-7B-Instruct` (28 layers), same pipeline, same 1.5x
+perplexity threshold: removed only **2/28 layers (7.1%)** before
+stopping — much *less* than the 0.5B model's 20.8% or the 1.5B model's
+21.4%. This complicates the earlier "model size doesn't change
+removability" finding rather than confirming it — three data points
+(0.5B: 20.8%, 1.5B: 21.4%, 7B: 7.1%) don't form a clean trend either
+way. Plausible explanation, not yet confirmed: 7B's baseline
+perplexity (6.879) is already lower/better than the smaller models',
+so a *fixed ratio* threshold like 1.5x represents a smaller absolute
+tolerance when the baseline is already low — a real methodological
+question about whether a ratio-based threshold is actually comparable
+across models with different baseline quality, not just a straight
+"bigger model, more/less prunable" result.
+
+Had to resume the pipeline mid-run after it hit a background time
+limit right as the 7B pruning step started - cost nothing since
+steps 1-2 (download, convert, quantize the original) had already
+completed and were preserved.
+
+**Both the original and pruned 7B models were tested on GPU (Vulkan),
+as specifically requested - both fit entirely in the RX 580's 8GB
+VRAM**, no partial CPU offload needed:
+
+| | Original (28L) | Pruned (26L) | Δ |
+|---|---|---|---|
+| Model weights (VRAM) | 4168.09 MiB | 3900.82 MiB | -6.4% |
+| KV-cache (VRAM) | 112.00 MiB | 104.00 MiB | -7.1% (exact 26/28 match) |
+| Compute buffer (VRAM) | 304.00 MiB | 304.00 MiB | 0% (confirms the n_ubatch finding holds at 7B too) |
+| Host RSS | ~4572 MiB | ~4305 MiB | -5.9% |
+| Wall time (5 reps) | 3.684s | 2.927s | -20.6% (disproportionately bigger than the size reduction - noted, not over-interpreted from one measurement) |
