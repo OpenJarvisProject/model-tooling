@@ -136,8 +136,45 @@ smaller. It only helps on rectangular matrices (gate/up/down_proj,
 without accounting for this produced a net -1.8% "reduction" (i.e. the
 model got *bigger*) even though the iterative safety-validation itself
 worked correctly (109/168 matrices accepted, 1.45x baseline
-perplexity). Testing lower fractions, safely under the square-matrix
-breakeven, next.
+perplexity).
+
+**At keep_fraction=0.4 (below the square-matrix breakeven), real
+compression is achieved**: 77/168 matrices accepted, 70.9M→45.8M
+params in the targeted layers (**35.4% reduction**), 1.48x baseline
+perplexity — a very similar safety margin to the 0.75 run, just with
+an actually-shrunk model this time.
+
+**A third problem, caught by self-verification, not assumed away**:
+the saved checkpoint generated complete gibberish on reload despite
+the in-script perplexity looking fine. Root cause: `save_pretrained`/
+plain `from_pretrained` has no idea `FactorizedLinear` exists -
+reloading reconstructs a *standard* Qwen2 architecture, finds the
+checkpoint's `*.first.weight`/`*.second.weight` keys don't match the
+expected plain `*.weight` key, and **silently randomly reinitializes**
+every factorized matrix instead of loading the real trained weights.
+The in-script perplexity numbers were always trustworthy (they ran on
+the correctly-structured live model) - only the saved artifact was
+broken. Fixed by adding `factorization_metadata.json` (which matrices
+were replaced, at what rank) alongside the normal save, and a proper
+`load_factorized_model()` that rebuilds the exact same module
+structure *before* loading weights, rather than trusting
+`from_pretrained` to guess it. `main()` now calls this reload-and-
+verify step automatically on every run, specifically so this bug
+class can't silently reappear and go unnoticed again.
+
+Two more real bugs surfaced immediately by that same self-check
+(not separately caught by luck - this is exactly why the check was
+added): a `strict=True` `load_state_dict` failing on `lm_head.weight`
+(tied to the input embedding, so legitimately absent from the saved
+file - fixed with `strict=False` plus an explicit check that no
+*other*, unexpected keys are missing, so a real future bug can't hide
+behind this fix), and a dtype mismatch (`from_config` doesn't respect
+`config.torch_dtype` the way `from_pretrained(dtype="auto")` does,
+so the rebuilt skeleton defaulted to float32 against bf16 checkpoint
+data - fixed by resolving and passing the dtype explicitly). Final
+state, verified both by perplexity match and actual coherent
+generation on the reloaded model: correct, working, 35.4% smaller in
+the targeted layers.
 
 ### 7B model tested (2026-10-11): less prunable than smaller models, not more
 

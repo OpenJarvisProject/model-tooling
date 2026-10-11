@@ -183,8 +183,8 @@ def apply_factorization_structure(model, applied: list[dict]):
         parent = getattr(layer, entry["parent_name"])
         linear = getattr(parent, entry["submodule_name"])
         k = entry["rank"]
-        first = nn.Linear(linear.in_features, k, bias=False)
-        second = nn.Linear(k, linear.out_features, bias=linear.bias is not None)
+        first = nn.Linear(linear.in_features, k, bias=False).to(linear.weight.dtype)
+        second = nn.Linear(k, linear.out_features, bias=linear.bias is not None).to(linear.weight.dtype)
         setattr(parent, entry["submodule_name"], FactorizedLinear(first, second))
 
 
@@ -203,13 +203,44 @@ def load_factorized_model(path):
     import os
 
     from safetensors.torch import load_file
+    from transformers import AutoConfig
 
     with open(os.path.join(path, "factorization_metadata.json")) as f:
         applied = json.load(f)
-    model = AutoModelForCausalLM.from_pretrained(path)
+    # Build from config only - AutoModelForCausalLM.from_pretrained(path)
+    # would immediately try (and fail) to load the mismatched checkpoint
+    # into the plain architecture first, producing the exact confusing
+    # missing/unexpected-key warnings this function exists to avoid.
+    config = AutoConfig.from_pretrained(path)
+    # from_config, unlike from_pretrained(dtype="auto"), does NOT read
+    # config.torch_dtype automatically - it defaults to float32, which
+    # then mismatches the actual (e.g. bf16) checkpoint data during the
+    # forward pass. Resolve and pass it explicitly.
+    config_dtype = getattr(config, "torch_dtype", None)
+    if config_dtype is None:
+        dtype = torch.float32
+    elif isinstance(config_dtype, torch.dtype):
+        dtype = config_dtype
+    else:
+        dtype = getattr(torch, config_dtype)
+    model = AutoModelForCausalLM.from_config(config, dtype=dtype)
     apply_factorization_structure(model, applied)
     state_dict = load_file(os.path.join(path, "model.safetensors"))
-    model.load_state_dict(state_dict)
+    # strict=False: tied weights (e.g. lm_head tied to the input
+    # embedding when config.tie_word_embeddings) aren't saved twice, so
+    # they're legitimately absent from the safetensors file - re-tie
+    # explicitly afterward rather than silently trusting from_config's
+    # random init for that tensor.
+    result = model.load_state_dict(state_dict, strict=False)
+    expected_missing = {"lm_head.weight"} if getattr(config, "tie_word_embeddings", False) else set()
+    unexpected_missing = set(result.missing_keys) - expected_missing
+    if unexpected_missing or result.unexpected_keys:
+        raise RuntimeError(
+            f"load_factorized_model found real mismatches beyond the expected tied "
+            f"lm_head: missing={unexpected_missing}, unexpected={result.unexpected_keys}"
+        )
+    if getattr(config, "tie_word_embeddings", False):
+        model.lm_head.weight = model.model.embed_tokens.weight
     return model
 
 
