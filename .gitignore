@@ -3,3 +3,4 @@
 *.gguf
 *.safetensors
 *.bin
+pruned-*/
