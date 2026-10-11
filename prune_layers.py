@@ -165,8 +165,12 @@ def restore_layer(model, index: int, removed_module, removed_layer_type):
         model.config.layer_types = layer_types
 
 
-def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl_ratio: float):
-    baseline_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
+def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl_ratio: float, ppl_fn=None):
+    # ppl_fn: optional model -> perplexity override (see evalharness.py); the
+    # built-in 4-sentence VALIDATION_TEXTS proved too small and overfit.
+    if ppl_fn is None:
+        ppl_fn = lambda m: compute_perplexity(m, tokenizer, VALIDATION_TEXTS, device)
+    baseline_ppl = ppl_fn(model)
     print(f"Baseline perplexity: {baseline_ppl:.3f}")
 
     removed_count = 0
@@ -179,7 +183,7 @@ def prune_iteratively(model, tokenizer, device: str, num_to_remove: int, max_ppl
         accepted = False
         for candidate in ranked:
             removed_module, removed_layer_type = remove_one_layer(model, candidate)
-            trial_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
+            trial_ppl = ppl_fn(model)
             ratio = trial_ppl / baseline_ppl
             print(
                 f"  trying to remove layer {candidate} "

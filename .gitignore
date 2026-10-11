@@ -13,3 +13,4 @@ repeat-*/
 gguf-compare/
 .hf-cache/
 __pycache__/
+wikitext2-*.txt

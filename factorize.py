@@ -100,18 +100,7 @@ def find_target_linears(model):
     return targets
 
 
-def reconstruction_error(linear: nn.Linear, keep_fraction: float) -> float:
-    """Cheap, forward-pass-free safety proxy: how much does the
-    rank-truncated matrix actually differ from the original? Used to
-    try the safest (lowest-error) matrices first, same role cosine
-    similarity played for layer-removal pruning."""
-    factorized, _, _ = factorize_linear(linear, keep_fraction)
-    W_original = linear.weight.data.to(torch.float32)
-    W_approx = factorized.second.weight.data.to(torch.float32) @ factorized.first.weight.data.to(torch.float32)
-    return ((W_approx - W_original).norm() / W_original.norm()).item()
-
-
-def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, max_ppl_ratio: float):
+def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, max_ppl_ratio: float, ppl_fn=None):
     """Unlike the first (batch) attempt, which factorized all 168
     target matrices at once and broke the model outright (9509x
     baseline perplexity, see README) despite each individual matrix
@@ -120,14 +109,19 @@ def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, m
     validating perplexity after each and reverting any that fails.
     Same lesson as prune_layers.py's iterative rewrite, applied to a
     different technique."""
-    baseline_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
+    if ppl_fn is None:
+        ppl_fn = lambda m: compute_perplexity(m, tokenizer, VALIDATION_TEXTS, device)
+    baseline_ppl = ppl_fn(model)
     print(f"Baseline perplexity: {baseline_ppl:.3f}")
 
     targets = find_target_linears(model)
-    scored = [
-        (reconstruction_error(linear, keep_fraction), layer_idx, parent, parent_name, name, linear)
-        for layer_idx, parent, parent_name, name, linear in targets
-    ]
+    scored = []
+    for layer_idx, parent, parent_name, name, linear in targets:
+        built = factorize_linear(linear, keep_fraction)
+        W = linear.weight.data.to(torch.float32)
+        W_approx = built[0].second.weight.data.to(torch.float32) @ built[0].first.weight.data.to(torch.float32)
+        error = ((W_approx - W).norm() / W.norm()).item()
+        scored.append((error, layer_idx, parent, parent_name, name, linear, built))
     scored.sort(key=lambda t: t[0])  # safest (lowest error) first
 
     accepted = 0
@@ -136,10 +130,10 @@ def factorize_iteratively(model, tokenizer, device: str, keep_fraction: float, m
     total_new_params = 0
     applied = []  # metadata for load_factorized_model: which matrices were actually replaced
 
-    for error, layer_idx, parent, parent_name, name, linear in scored:
-        factorized, orig_p, new_p = factorize_linear(linear, keep_fraction)
+    for error, layer_idx, parent, parent_name, name, linear, built in scored:
+        factorized, orig_p, new_p = built
         setattr(parent, name, factorized)
-        trial_ppl = compute_perplexity(model, tokenizer, VALIDATION_TEXTS, device)
+        trial_ppl = ppl_fn(model)
         ratio = trial_ppl / baseline_ppl
         if ratio <= max_ppl_ratio:
             accepted += 1

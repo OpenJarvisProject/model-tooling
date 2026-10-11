@@ -208,3 +208,92 @@ VRAM**, no partial CPU offload needed:
 | Compute buffer (VRAM) | 304.00 MiB | 304.00 MiB | 0% (confirms the n_ubatch finding holds at 7B too) |
 | Host RSS | ~4572 MiB | ~4305 MiB | -5.9% |
 | Wall time (5 reps) | 3.684s | 2.927s | -20.6% (disproportionately bigger than the size reduction - noted, not over-interpreted from one measurement) |
+
+## Combination study: what to apply, in what order (2026-10-11)
+
+`combine.py` + `evalharness.py` + `validate_quant_sim.py`. All numbers
+below are on **Qwen2.5-0.5B-Instruct**, measured on held-out
+wikitext-2 *test* (16K tokens); in-loop accept/reject decisions use
+wikitext-2 *validation* (2K tokens). Full-precision baseline: test
+perplexity **17.59**.
+
+### Methodology correction first
+
+Every earlier pruning/factorization quality number in this README was
+overstated. The in-loop check used 4 hand-written sentences and the
+greedy search overfit to them. Re-measured on held-out text:
+
+| Earlier artifact | Claimed | Held-out reality | Params saved |
+|---|---|---|---|
+| Pruned, 5 layers | 1.50x | **2.42x** | 15.1% |
+| Factorized, keep 0.4 | 1.48x | **3.52x** | 5.1% |
+
+With the larger validation set the search no longer overfits: P's
+validation ratio (1.52x) and test ratio (1.45x) agree.
+
+### Equal-budget comparison (1.5625x total val budget each)
+
+| Condition | fp16 size | Test ppl |
+|---|---|---|
+| Original | 988 MB | 17.59 |
+| Prune only (4 layers removed) | 869 MB (-12.1%) | 25.48 (1.45x) |
+| Factorize only (58/168 matrices) | 971 MB (-1.7%) | 27.19 (1.55x) |
+
+Size saved per unit of quality lost: quantization ≈ 10x pruning ≈ 10x
+factorization. Factorization is dominated at this scale.
+
+### Real quantization, same held-out metric
+
+| llama.cpp quant | Original (24L) | Pruned (20L) |
+|---|---|---|
+| Q5_K_M | 420 MB @ 18.13 | 375 MB @ 26.20 |
+| Q4_K_M | 398 MB @ 18.21 | 357 MB @ 26.56 |
+| Q3_K_M | 356 MB @ 19.53 | 321 MB @ 28.60 |
+| Q4_0 | 352 MB @ 20.16 | 319 MB @ 29.77 |
+| Q2_K | 339 MB @ 22.33 | 307 MB @ 36.35 |
+
+At equal file size, quantizing harder beats pruning by a wide margin
+(Q3_K_M original 356 MB @ 19.5 vs Q4_K_M pruned 357 MB @ 26.6).
+Simulated round-to-nearest 4-bit (used for factorized conditions,
+which GGUF can't represent) lands at 21.97 vs real Q4_0's 20.16: same
+ballpark, slightly pessimistic, fine for ranking. Simulated 3-bit is
+far worse than real Q3_K_M - don't trust the 3-bit simulation.
+
+### The real size floor: the embedding table
+
+Quantization bottoms out near ~338 MB because `token_embd` (152K vocab
+x 896 = 136M params, 28% of the model, tied to the output projection)
+stays at **Q8_0 at every quant level** - 37% of the Q4_K_M file, 43%
+of Q2_K. Pruning and factorization never touch it.
+
+Gotcha: K-quants need rows divisible by 256 and this model's hidden
+size is 896, so `--token-embedding-type q6_K/q5_K/q4_K` fails outright
+- and it's also why llama-quantize logged "144 of 290 tensors required
+fallback quantization": on 0.5B, "Q4_K_M" isn't really Q4_K_M for half
+its tensors. Block-32 types fit:
+
+| Layers | Embedding | Size | Test ppl |
+|---|---|---|---|
+| Q4_K_M | Q8_0 (default) | 398 MB | 18.21 |
+| Q4_K_M | Q5_0 | **347 MB** | **18.39** |
+| Q4_K_M | Q4_0 | 330 MB | 19.04 |
+| Q3_K_M | Q8_0 (default) | 356 MB | 19.53 |
+| Q3_K_M | Q5_0 | **304 MB** | **19.72** |
+| Q3_K_M | Q4_0 | 287 MB | 20.48 |
+
+**304 MB @ 19.7 is smaller than every pruned model produced (best: 307
+MB @ 36.3).** Every point on the size/quality frontier at this scale is
+"original weights, mixed-precision quantization". Recommended default
+for small Qwen models: `llama-quantize --token-embedding-type q5_0
+<f16> <out> Q4_K_M` (or Q3_K_M for a tighter budget).
+
+### Why the structural methods lose, and what would change that
+
+Both pruning and factorization here are training-free. Published depth/
+width-pruning work (ShortGPT, LLM-Pruner, NVIDIA Minitron) consistently
+pairs them with a recovery step - LoRA fine-tuning or distillation
+from the unpruned model - and that step is where most of the lost
+quality comes back. The likely-correct full order is **prune ->
+heal (distill/fine-tune) -> quantize (layers + embeddings)**. Untested
+here: it needs a training loop, which on this machine means CPU or a
+burn/Vulkan path (ROCm is dead on the RX 580).
