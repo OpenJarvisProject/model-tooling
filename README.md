@@ -77,3 +77,24 @@ layers are load-bearing). Result: 24→19 layers, 954MB→812MB on disk,
 and the pruned model still generates fluent, on-topic (if sometimes
 factually imperfect) text — a genuinely smaller/weaker model, not a
 broken one.
+
+### Threshold sensitivity (Qwen2.5-0.5B, found 2026-10-11)
+
+Confirmed deterministic first (exact-repeat diff of two identical runs
+produced zero differences) — ruled out CPU multi-threaded BLAS
+non-determinism as a confound before trusting any threshold
+comparison. Looser `--max-ppl-ratio` doesn't just gate the final
+cutoff decision — it reshapes the entire greedy trajectory, since an
+earlier marginal candidate's accept/reject decision changes the model
+state for every subsequent step. On this model specifically:
+
+| `--max-ppl-ratio` | Layers removed (of 24) |
+|---|---|
+| 1.5x | 5 |
+| 3.0x | 5 (same count, different removal path) |
+| 10.0x | 7 |
+
+There's a real structural cliff somewhere between 3x and 10x acceptable
+perplexity degradation on this model — not a smooth gradient. Pushing
+the nominal removal target higher (6 vs 22) doesn't change the ceiling
+at a fixed threshold; confirmed identical stopping point either way.
