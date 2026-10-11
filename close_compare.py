@@ -61,9 +61,14 @@ def winogrande(model):
 
 
 def multiple_choice(model, binfile):
-    out = ppl_tool(model, "--multiple-choice", "-bf", DATA / binfile)
-    acc, err = re.search(r"Final result: ([0-9.]+) \+/- ([0-9.]+)", out).groups()
-    return {"acc": float(acc), "err": float(err)}
+    # TruthfulQA has up to ~13 answers per task and each needs its own
+    # sequence, hence -np 16. -c 4096 keeps the host logits buffer
+    # (n_ctx x n_vocab floats) at ~2.5GB; -c 8192 hit bad_alloc.
+    out = ppl_tool(model, "--multiple-choice", "-bf", DATA / binfile, "-np", "16", "-c", "4096")
+    m = re.search(r"Final result: ([0-9.]+) \+/- ([0-9.]+)", out)
+    if not m:  # llama-perplexity can log an error and still exit 0
+        raise RuntimeError(f"no multiple-choice result for {binfile}:\n{out[-1500:]}")
+    return {"acc": float(m.group(1)), "err": float(m.group(2))}
 
 
 def agent(model):
@@ -108,21 +113,31 @@ def main():
         return
 
     base_logits = OUT / "base.kld"
-    ppl_tool(models[0][1], "-f", HERE / "wikitext2-test.txt", "-c", "512", "--chunks", "20",
-             "--kl-divergence-base", base_logits)
+    if not base_logits.exists():
+        ppl_tool(models[0][1], "-f", HERE / "wikitext2-test.txt", "-c", "512", "--chunks", "20",
+                 "--kl-divergence-base", base_logits)
 
     for label, path in models:
-        row = {"model": label, "mb": round(Path(path).stat().st_size / 1e6, 1)}
+        # Each metric is saved as soon as it finishes; a rerun skips
+        # whatever is already in the file, so a crash loses one metric.
+        out_file = OUT / f"{label}.json"
+        row = json.loads(out_file.read_text()) if out_file.exists() else {}
+        row.update(model=label, mb=round(Path(path).stat().st_size / 1e6, 1))
+        metrics = {
+            "hellaswag": lambda: hellaswag(path),
+            "winogrande": lambda: winogrande(path),
+            "arc": lambda: multiple_choice(path, "arc-combined-validation.bin"),
+            "mmlu": lambda: multiple_choice(path, "mmlu-validation.bin"),
+            "truthfulqa": lambda: multiple_choice(path, "truthful-qa-validation.bin"),
+            "agent": lambda: agent(path),
+        }
         if label != models[0][0]:
-            row["vs_original"] = kl_divergence(path, base_logits)
-        row["hellaswag"] = hellaswag(path)
-        row["winogrande"] = winogrande(path)
-        row["arc"] = multiple_choice(path, "arc-combined-validation.bin")
-        row["mmlu"] = multiple_choice(path, "mmlu-validation.bin")
-        row["truthfulqa"] = multiple_choice(path, "truthful-qa-validation.bin")
-        row["agent"] = agent(path)
+            metrics = {"vs_original": lambda: kl_divergence(path, base_logits), **metrics}
+        for key, fn in metrics.items():
+            if key not in row:
+                row[key] = fn()
+                out_file.write_text(json.dumps(row, indent=2))
         print("RESULT", json.dumps(row), flush=True)
-        (OUT / f"{label}.json").write_text(json.dumps(row, indent=2))
 
     base_logits.unlink()
 
