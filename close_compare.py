@@ -91,8 +91,8 @@ def agent(model):
         server.wait()
 
 
-def speed(model):
-    out = run([BIN / "llama-bench", "-m", model, "-ngl", "0,99", "-p", "256", "-n", "64", "-o", "json"])
+def speed(model, ngl="0,99"):
+    out = run([BIN / "llama-bench", "-m", model, "-ngl", ngl, "-p", "256", "-n", "64", "-o", "json"])
     rows = json.loads(out[out.index("["):out.rindex("]") + 1])
     return {f"{'gpu' if r['n_gpu_layers'] else 'cpu'}_{'prompt' if r['n_prompt'] else 'gen'}_tok_s": round(r["avg_ts"], 1)
             for r in rows}
@@ -102,8 +102,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="+", help="label=path.gguf; the FIRST is the reference original")
     parser.add_argument("--speed", action="store_true", help="only run llama-bench")
+    parser.add_argument("--out", type=Path, default=OUT, help="results directory")
     args = parser.parse_args()
-    OUT.mkdir(parents=True, exist_ok=True)
+    out_dir = args.out
+    out_dir.mkdir(parents=True, exist_ok=True)
     models = [m.split("=", 1) for m in args.models]
 
     if args.speed:
@@ -112,7 +114,7 @@ def main():
             print("RESULT", json.dumps(row), flush=True)
         return
 
-    base_logits = OUT / "base.kld"
+    base_logits = out_dir / "base.kld"
     if not base_logits.exists():
         ppl_tool(models[0][1], "-f", HERE / "wikitext2-test.txt", "-c", "512", "--chunks", "20",
                  "--kl-divergence-base", base_logits)
@@ -120,7 +122,7 @@ def main():
     for label, path in models:
         # Each metric is saved as soon as it finishes; a rerun skips
         # whatever is already in the file, so a crash loses one metric.
-        out_file = OUT / f"{label}.json"
+        out_file = out_dir / f"{label}.json"
         row = json.loads(out_file.read_text()) if out_file.exists() else {}
         row.update(model=label, mb=round(Path(path).stat().st_size / 1e6, 1))
         metrics = {
