@@ -225,9 +225,50 @@ llama-quantize --imatrix imatrix.gguf \
   examples, the 0.5B scores 16/24 and the 1.5B 19/24 on the dev set.
   Zero-shot, the 0.5B scores 6/24.
 
+## 6. Qwen2.5-1.5B-Instruct: quantization study and task tests
+
+`quant_study.py` (same method as section 2; imatrix from wikitext-2 train,
+scored on wikitext-2 test, llama.cpp/Vulkan). Reference is Q8_0 at 9.708 ppl
+(the stock official Q4_K_M, 1066 MB, was not scored this way).
+
+| Variant | MB | ppl | vs Q8_0 |
+|---|---|---|---|
+| Q8_0 | 1647 | 9.708 | |
+| Q4_K_M | 986 | 10.213 | +5.2% |
+| **Q4_K_M + imatrix** | **986** | **9.954** | **+2.5%** |
+| Q4_K_M + imat + emb q5_K | 955 | 10.041 | +3.4% |
+| Q4_K_M + imat + emb q4_K | 926 | 10.236 | +5.4% |
+| IQ4_XS + imatrix | 896 | 10.081 | +3.8% |
+| IQ3_M + imatrix | 777 | 10.919 | +12.5% |
+| IQ3_XXS + imatrix | 669 | 11.944 | +23% |
+| Q3_K_M + imatrix | 824 | 10.924 | +12.5% |
+| Q2_K + imatrix | 676 | 13.472 | +39% |
+| IQ2_M + imatrix | 601 | 14.474 | +49% |
+
+The perplexity error bars are about ±0.2, so differences under that are noise.
+
+**Task tests** (OJP `ojp-cli route-eval`, `tool-eval`, `agent-eval`; CPU, the
+model both routes and picks tools; 4 candidates, one change each):
+
+| Model | MB | route test / dev | tool seen / unseen / multi | agent tasks | s per request |
+|---|---|---|---|---|---|
+| stock official Q4_K_M | 1066 | 10/10, 23/24 | 36/39, 19/20, 14/14 | 26/28 | 2.1 |
+| **Q4_K_M + imatrix** | **941** | 10/10, **24/24** | **37/39, 20/20**, 14/14 | 26/28 | 2.1 |
+| IQ4_XS + imatrix | 855 | 10/10, 23/24 | 36/39, 20/20, 14/14 | 25/28 | 2.7 |
+| IQ3_M + imatrix | 741 | 10/10, 23/24 | 32/39, 20/20, 14/14 | 25/28 | 6.1 |
+
+Findings:
+- **Q4_K_M + imatrix is the pick:** 12% smaller than the stock file, equal or
+  better on every task test, same speed. sha256
+  `c98e1a583924c7158e7b56d161ea121a864755de6d60c148228ea4e4abb669d6`.
+- **Smaller isn't faster on a CPU:** the I-quants (IQ4_XS, IQ3_M) unpack slower,
+  so they cost time (up to 3x) and a little accuracy for 10-30% less disk.
+  Perplexity alone would not have shown this.
+- Below 4 bits quality falls quickly (IQ3_M +12.5%, 2-bit +49%).
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
-- The full quant study and hybrid scan on 1.5B.
+- The hybrid scan on 1.5B (the plain study is in section 6).
 - Hybrid mixes built on an IQ3_XXS base.
 - aarch64 (phone/laptop) speed and memory numbers.
