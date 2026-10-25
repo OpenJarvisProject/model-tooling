@@ -354,12 +354,12 @@ the same trimmed model, wikitext-2 test, 100 chunks; lower is better):
 - imatrix cuts the error by 37% at 0.8B (the earlier perplexity runs hid this
   in their ±0.4 noise; KLD is far less noisy than perplexity or the 24-case tests).
 
-**Trimmed vs full vocabulary, same quantization** (bits per byte on the whole
-wikitext-2 test; Q4_K_M + imatrix):
+**Trimmed vs full vocabulary, same quantization** (bits per byte, bpb, on the whole
+wikitext-2 test; Q4_K_M + imatrix except where noted):
 
 | Model | full vocab MB / bpb | trimmed MB / bpb | smaller | worse |
 |---|---|---|---|---|
-| 0.8B (Q8_0) | 812 / 0.6675 | 585 / 0.6721 | 28% | +0.7% |
+| 0.8B (Q8_0) | 812 / 0.963 | 585 / 0.970 | 28% | +0.7% |
 | 2B (+emb q5_K) | 1274 / 0.8517 | 917 / 0.8592 | 28% | +0.9% |
 | 4B (+emb q5_K) | 2709 / 0.7719 | 2264 / 0.7780 | 16% | +0.8% |
 
@@ -380,6 +380,94 @@ wikitext-2 test; Q4_K_M + imatrix):
   accuracy on the router tests, about 1.4-1.6x the time per request.
 - Whole assistant (36 tasks, trimmed models): 0.8B + 2B 32/36, 0.8B + 4B 34/36
   (untrimmed: 29/36 and 33-34/36); differences are within run-to-run noise.
+
+## 9. Qwen3.5 0.8B router: probe, vocabulary size, language packs, calibration order
+
+### The router becomes a probe
+
+The small model's own answer to "which of four labels" is weak and varied (80-case
+held-out set, never used for tuning): Qwen2.5-0.5B 66/80, Qwen3.5-0.8B 61/80 (Q8_0
+58/80, so it is not the quantization), Qwen2.5-1.5B 74/80. A linear classifier on the
+model's hidden state at the answer position (a "probe", fitted on 592 requests, a few
+KB of weights, `scripts/make-router-probe.sh`) scores far higher on the same held-out
+requests, and also on an out-of-distribution set of 42 requests with typos, slang
+and some French (`ojp-core/data/router-wild.tsv`, never fitted):
+
+| Router | generated, 80 held-out | probe, 80 held-out | generated, 42 wild | probe, 42 wild | ms: generated -> probe |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B (current) | 66 (82%) | 78 (97.5%) | 33 | 40 | 207 -> 133 |
+| Qwen3.5-0.8B trimmed Q4_K_M | 61 (76%) | 79 (98.8%) | - | - | 282 -> 174 |
+| Qwen3.5-0.8B trimmed IQ4_XS | - | 80 (100%) | 30 | 41 | 379 -> 207 |
+| Qwen2.5-1.5B (main model routing) | 74 (92.5%) | - | 35 | - | 456 |
+
+(The probe columns for the held-out set come from a probe fitted without that set;
+the shipped probe is refitted on train + held-out.) The probe needs no worked
+examples in the prompt (700 tokens -> about 60), so each request is faster, and it
+barely depends on quantization (probe accuracy, held-out 80, per 0.8B variant):
+
+| 0.8B trimmed variant | MB | probe held-out | 5-fold CV | peak RAM MB (low-memory) |
+|---|---|---|---|---|
+| Q8_0 | 585 | 100% | 99.2% | 798 |
+| Q4_K_M + imat | 352 | 98.8% | 99.3% | 578 |
+| IQ4_XS + imat | 327 | 100% | 99.0% | 554 (456 light) |
+| IQ3_M + imat | 277 | 100% | 99.5% | 507 |
+| IQ3_XXS + imat | 248 | 98.8% | 98.8% | - |
+| Q2_K + imat | 245 | 97.5% | 98.5% | 476 |
+
+For comparison the 0.5B router with a probe peaks at 614 MB. "Light" = one sequence and
+a 1024-token context, used when a local main model also exists (it answers and runs tools).
+
+### Vocabulary: how much to keep (0.8B, Q4_K_M + imatrix; bits per byte, lower is better)
+
+| Kept tokens | MB | English (held-out wikitext) | European (fr/de/es/pt/it) | Russian | Japanese | Arabic |
+|---|---|---|---|---|---|---|
+| all 248,320 | 529 | 0.982 | 1.002 | 0.613 | 0.971 | 0.882 |
+| 15% of them by corpus frequency | 346 | 0.999 (+1.7%) | 1.74 | - | - | - |
+| 10% | 335 | 1.028 (+4.6%) | 1.94 | - | - | - |
+| 5% | 324 | 1.129 (+15%) | 2.20 | - | - | - |
+| 2.5% | 318 | 1.286 (+31%) | 2.48 | - | - | - |
+| **every token seen in the English corpus (19.6%)** | **352** | **0.989 (+0.7%)** | 1.63 | 2.62 | 3.14 | 2.73 |
+
+The 20/80 rule holds for English: the 20% of the vocabulary that real English text
+uses costs 0.7%, and going below it quickly hurts (10% is +4.6% for 17 MB). Text in
+other scripts degrades a lot because it falls back to bytes.
+
+**Optional language packs** (extra tokens kept on top of the English 19.6%, built with
+`prune_vocab.py --scripts`; English is unchanged in every row):
+
+| Pack | MB | tokens | what it fixes |
+|---|---|---|---|
+| none | 352 | 48,736 | |
+| Cyrillic | 369 | 67,184 | Russian 2.62 -> 0.62 (full vocabulary 0.61) |
+| Arabic | 360 | 57,457 | Arabic 2.73 -> 0.90 (full 0.88) |
+| CJK + kana | 405 | 107,256 | Japanese 3.14 -> 1.08 (full 0.97) |
+| Latin accents | 364 | 61,503 | European 1.63 -> 1.52 (only part of the gap) |
+| Cyrillic + Greek + Latin accents | 382 | 81,375 | Russian 0.62, European 1.52 |
+| every script | 454 | 162,737 | Russian 0.63, Japanese 1.08, Arabic 0.91, European 1.51 |
+
+So a language pack costs 8-53 MB and restores that language almost completely; the
+cheap way to offer this is a second GGUF per pack that the user picks (the model path
+is already configurable), not the default. European languages written in Latin
+letters need their common words, not just accented tokens; keeping by the original
+BPE id order (a rough all-language frequency rank) in addition to the English corpus
+tokens helps gradually (European 1.63 -> 1.55 / 1.47 / 1.33 for ids below 20k / 40k / 80k
+for +5 / +14 / +36 MB) but is a worse use of bytes than the corpus for English alone
+(ids below 49k with no corpus: English 1.088).
+
+### Order of operations and calibration text (0.8B trimmed, Q4_K_M; KL divergence from the
+Q8_0 of the same trimmed model, lower is better)
+
+| imatrix | wikitext-2 test KLD | OJP task text KLD |
+|---|---|---|
+| none | 0.0602 | 0.0378 |
+| from the full-vocabulary model, wikitext (trim after) | 0.0378 | 0.0235 |
+| from the trimmed model, wikitext (trim before) | 0.0378 | 0.0235 |
+| from the trimmed model, OJP calibration mix | 0.0386 | 0.0247 |
+| from the trimmed model, OJP task text only | 0.0393 | 0.0251 |
+
+- Trim-then-imatrix and imatrix-then-trim give identical results; the order does not matter.
+- Generic text calibrates as well as OJP's own text, even when scored on OJP-style text.
+- The imatrix is worth about 38% of the quantization error in both cases.
 
 ## Not yet tested
 

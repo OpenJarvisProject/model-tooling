@@ -47,6 +47,15 @@ def main():
     ap.add_argument("ids", type=Path, help="llama-tokenize --ids output over the keep-corpus")
     ap.add_argument("--ascii", action="store_true", help="also keep every pure-ASCII token")
     ap.add_argument("--min-count", type=int, default=1)
+    ap.add_argument("--scripts", default="",
+                    help="comma list of scripts whose tokens are all kept (optional language packs): "
+                         "latin-ext, cyrillic, greek, arabic, hebrew, devanagari, thai, cjk, hangul")
+    ap.add_argument("--rank-keep", type=int, default=0,
+                    help="also keep every token with id below this (BPE ids follow merge order, so a "
+                         "rough all-language frequency rank)")
+    ap.add_argument("--no-corpus", action="store_true", help="ignore the corpus: keep by --rank-keep only")
+    ap.add_argument("--top-pct", type=float, default=None,
+                    help="keep only the most frequent corpus tokens, this percent of the original vocabulary")
     args = ap.parse_args()
 
     reader = gguf.GGUFReader(args.src)
@@ -58,6 +67,13 @@ def main():
 
     counts = Counter(json.loads(args.ids.read_text()))
     keep = set(i for i, c in counts.items() if c >= args.min_count)
+    if args.top_pct is not None:
+        top = int(len(tokens) * args.top_pct / 100)
+        keep = set(i for i, _ in counts.most_common(top))
+    if args.no_corpus:
+        keep = set()
+    if args.rank_keep:
+        keep.update(i for i in range(args.rank_keep) if types[i] == 1)
     n_corpus = len(keep)
     for i in range(n):
         if types[i] != 1:  # not a normal token: control, user-defined, byte, ...
@@ -68,6 +84,29 @@ def main():
         for i, t in enumerate(tokens):
             if types[i] == 1 and all(ch in dec and dec[ch] < 128 for ch in t):
                 keep.add(i)
+    if args.scripts:
+        import unicodedata
+        want = {x.strip() for x in args.scripts.split(",") if x.strip()}
+        prefixes = {"cyrillic": ("CYRILLIC",), "greek": ("GREEK",), "arabic": ("ARABIC",), "hebrew": ("HEBREW",),
+                    "devanagari": ("DEVANAGARI",), "thai": ("THAI",), "hangul": ("HANGUL",),
+                    "cjk": ("CJK", "HIRAGANA", "KATAKANA")}
+        for i, t in enumerate(tokens):
+            if types[i] != 1:
+                continue
+            try:
+                text = bytes(dec[ch] for ch in t if ch in dec).decode("utf-8", "ignore")
+            except Exception:
+                continue
+            for ch in text:
+                if ord(ch) < 128:
+                    continue
+                name = unicodedata.name(ch, "")
+                hit = any(name.startswith(pfx) for k in want if k in prefixes for pfx in prefixes[k])
+                if "latin-ext" in want and name.startswith("LATIN") and ord(ch) < 0x250:
+                    hit = True
+                if hit:
+                    keep.add(i)
+                    break
     n_before_closure = len(keep)
 
     # Merge ancestors: for each kept token, the pair(s) that build it must be kept.
