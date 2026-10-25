@@ -342,12 +342,12 @@ the same trimmed model, wikitext-2 test, 100 chunks; lower is better):
 |---|---|---|---|
 | Q5_K_M + imatrix | 401 | 0.0116 | 93.9% |
 | **Q4_K_M + imatrix** | **352** | **0.0378** | **89.5%** |
-| Q4_K_M + imat + emb q5_0 | 340 | 0.0423 | 88.7% |
+| Q4_K_M + imat + emb q5_0 | 346 | 0.0423 | 88.7% |
 | Q4_K_M + imat + emb q4_K | 340 | 0.0501 | 87.5% |
 | IQ4_XS + imatrix | 327 | 0.0509 | 87.9% |
 | Q4_K_M, no imatrix | 352 | 0.0602 | 87.0% |
-| Q4_K_M + imat + emb q3_K | 330 | 0.1020 | 80.5% |
-| IQ3_M + imatrix | 305 | 0.1422 | 80.5% |
+| Q4_K_M + imat + emb q3_K | 333 | 0.1020 | 80.5% |
+| IQ3_M + imatrix | 277 | 0.1422 | 80.5% |
 
 - The embedding doubles as the output layer, so it hurts more to squeeze
   than in Qwen2.5: keep it at the default (Q6_K); q3_K or lower is bad.
@@ -359,7 +359,7 @@ wikitext-2 test; Q4_K_M + imatrix):
 
 | Model | full vocab MB / bpb | trimmed MB / bpb | smaller | worse |
 |---|---|---|---|---|
-| 0.8B (Q8_0) | 812 / 0.6675 | 439 (Q8) / 0.6721 | | +0.7% |
+| 0.8B (Q8_0) | 812 / 0.6675 | 585 / 0.6721 | 28% | +0.7% |
 | 2B (+emb q5_K) | 1274 / 0.8517 | 917 / 0.8592 | 28% | +0.9% |
 | 4B (+emb q5_K) | 2709 / 0.7719 | 2264 / 0.7780 | 16% | +0.8% |
 
@@ -368,14 +368,14 @@ wikitext-2 test; Q4_K_M + imatrix):
 
 | Router | file MB | peak RAM MB | RAM, low-memory mode | ms/request | dev score |
 |---|---|---|---|---|---|
-| Qwen2.5 0.5B (Q4_K_M + imat + q5_0 emb) | 341 | 553 | 494 | 306 | 19/24 |
+| Qwen2.5 0.5B (Q4_K_M + imat + q5_0 emb) | 347 | 553 | 494 | 306 | 19/24 |
 | Qwen3.5 0.8B, full vocab, Q4_K_M + imat | 529 | 1039 | 782 | 513 | 19/24 |
 | **Qwen3.5 0.8B, trimmed vocab, Q4_K_M + imat** | **352** | **786** | **529** | 439 (482 low-memory) | 19/24 |
 
 - "Low-memory mode" (`models.low_memory`, `OJP_LOW_MEMORY`): llama.cpp keeps no
   repacked copy of the weights (-205 MB) and uses 128-token scratch buffers
   (-50 MB); about 10% slower. The same switch also saves 59 MB on the 0.5B.
-- Trimmed 0.8B router: same disk as the 0.5B (352 vs 341 MB), -33% against the
+- Trimmed 0.8B router: same disk as the 0.5B (352 vs 347 MB), -33% against the
   untrimmed 0.8B, RAM within 35 MB of the 0.5B in low-memory mode, same
   accuracy on the router tests, about 1.4-1.6x the time per request.
 - Whole assistant (36 tasks, trimmed models): 0.8B + 2B 32/36, 0.8B + 4B 34/36
