@@ -21,7 +21,7 @@ from pathlib import Path
 
 import agent_tests
 
-BIN = Path("/tmp/llama-cpp-convert/build-vk/bin")
+BIN = Path("/media/openjarvisproject-model-tooling/llama.cpp/build-vk/bin")
 ENV = {**os.environ, "VK_ICD_FILENAMES": "/usr/share/vulkan/icd.d/radeon_icd.json"}
 HERE = Path(__file__).parent
 DATA = HERE / "bench-data"
@@ -62,9 +62,11 @@ def winogrande(model):
 
 def multiple_choice(model, binfile):
     # TruthfulQA has up to ~13 answers per task and each needs its own
-    # sequence, hence -np 16. -c 4096 keeps the host logits buffer
-    # (n_ctx x n_vocab floats) at ~2.5GB; -c 8192 hit bad_alloc.
-    out = ppl_tool(model, "--multiple-choice", "-bf", DATA / binfile, "-np", "16", "-c", "4096")
+    # sequence, hence -np 16. The newer llama.cpp applies -c per sequence, so
+    # -c 4096 became a 65536-token context and a ~40GB host logits buffer
+    # (bad_alloc). -c 512 per sequence fits every task and gives the same
+    # accuracy as 256 (checked on the 1.5B).
+    out = ppl_tool(model, "--multiple-choice", "-bf", DATA / binfile, "-np", "16", "-c", "512")
     m = re.search(r"Final result: ([0-9.]+) \+/- ([0-9.]+)", out)
     if not m:  # llama-perplexity can log an error and still exit 0
         raise RuntimeError(f"no multiple-choice result for {binfile}:\n{out[-1500:]}")

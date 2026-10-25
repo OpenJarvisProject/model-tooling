@@ -1,0 +1,10 @@
+[Unit]
+Description=Start/resume the OJP 7B GPU study every 30 minutes until it reports DONE
+
+[Timer]
+OnBootSec=5min
+OnUnitInactiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

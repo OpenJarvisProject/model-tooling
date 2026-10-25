@@ -18,7 +18,7 @@ import re
 import subprocess
 from pathlib import Path
 
-BIN = Path("/tmp/llama-cpp-convert/build-vk/bin")
+BIN = Path("/media/openjarvisproject-model-tooling/llama.cpp/build-vk/bin")
 ENV = {**os.environ, "VK_ICD_FILENAMES": "/usr/share/vulkan/icd.d/radeon_icd.json"}
 HERE = Path(__file__).parent
 

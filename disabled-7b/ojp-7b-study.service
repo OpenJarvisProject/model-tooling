@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenJarvisProject: resumable Qwen2.5-7B GPU quantization study
+Documentation=file:///media/openjarvisproject-model-tooling/seven_b_study.py
+
+[Service]
+Type=oneshot
+WorkingDirectory=/media/openjarvisproject-model-tooling
+Environment=HF_HOME=/media/openjarvisproject-model-tooling/.hf-cache
+ExecStart=/media/openjarvisproject-model-tooling/.venv-cpu/bin/python seven_b_study.py
+Nice=5
+TimeoutStartSec=infinity

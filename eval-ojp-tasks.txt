@@ -1,0 +1,331 @@
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Set a timer for 10 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 10}}]<|im_end|>
+<|im_start|>user
+Start a 5 minute timer.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 5}}]<|im_end|>
+<|im_start|>user
+Wake me up in 45 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 45}}]<|im_end|>
+<|im_start|>user
+Set the volume to 40.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 40}}]<|im_end|>
+<|im_start|>user
+Turn the volume down to 15 percent.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 15}}]<|im_end|>
+<|im_start|>user
+Make it louder, 80 please.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 80}}]<|im_end|>
+<|im_start|>user
+Mute the sound.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}]<|im_end|>
+<|im_start|>user
+Unmute my speakers.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "off"}}]<|im_end|>
+<|im_start|>user
+Pause the music.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "play_pause"}}]<|im_end|>
+<|im_start|>user
+Skip this song.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "next"}}]<|im_end|>
+<|im_start|>user
+Go back to the previous track.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "previous"}}]<|im_end|>
+<|im_start|>user
+Open Firefox.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "firefox"}}]<|im_end|>
+<|im_start|>user
+Launch the terminal.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "terminal"}}]<|im_end|>
+<|im_start|>user
+Start Spotify.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "spotify"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Open github.com in the browser.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_url", "args": {"url": "github.com"}}]<|im_end|>
+<|im_start|>user
+Go to https://example.com<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_url", "args": {"url": "example.com"}}]<|im_end|>
+<|im_start|>user
+Take a note: buy oat milk.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {"text": "oat milk"}}]<|im_end|>
+<|im_start|>user
+Remember that the wifi password is on the fridge.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {"text": "fridge"}}]<|im_end|>
+<|im_start|>user
+What time is it?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+What's today's date?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+What day is it?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+How much battery do I have left?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+How much free disk space do I have?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+How's my computer doing?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+How much RAM is free?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+What song is playing?<|im_end|>
+<|im_start|>assistant
+[{"tool": "now_playing", "args": {}}]<|im_end|>
+<|im_start|>user
+What am I listening to right now?<|im_end|>
+<|im_start|>assistant
+[{"tool": "now_playing", "args": {}}]<|im_end|>
+<|im_start|>user
+What's on my clipboard?<|im_end|>
+<|im_start|>assistant
+[{"tool": "clipboard", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Read my clipboard.<|im_end|>
+<|im_start|>assistant
+[{"tool": "clipboard", "args": {}}]<|im_end|>
+<|im_start|>user
+Find my tax return files.<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "tax"}}]<|im_end|>
+<|im_start|>user
+Where is my resume?<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "resume"}}]<|im_end|>
+<|im_start|>user
+Search for files named budget.<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "budget"}}]<|im_end|>
+<|im_start|>user
+What notes do I have?<|im_end|>
+<|im_start|>assistant
+[{"tool": "notes_list", "args": {}}]<|im_end|>
+<|im_start|>user
+Read my notes back to me.<|im_end|>
+<|im_start|>assistant
+[{"tool": "notes_list", "args": {}}]<|im_end|>
+<|im_start|>user
+Give me a 15 minute countdown.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 15}}]<|im_end|>
+<|im_start|>user
+Put the speaker volume at 55.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 55}}]<|im_end|>
+<|im_start|>user
+Shut the speakers up for now.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}]<|im_end|>
+<|im_start|>user
+Turn the sound back on.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "off"}}]<|im_end|>
+<|im_start|>user
+Stop the song for a moment.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "play_pause"}}]<|im_end|>
+<|im_start|>user
+Next track, please.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "next"}}]<|im_end|>
+<|im_start|>user
+Bring up the calculator app.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "calc"}}]<|im_end|>
+<|im_start|>user
+Open wikipedia.org for me.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_url", "args": {"url": "wikipedia"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Write down: dentist on Friday at 9.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {"text": "dentist"}}]<|im_end|>
+<|im_start|>user
+Tell me what time it is now.<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+What's the date today?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+Is my laptop plugged in and how full is the battery?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+How much memory is being used?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+<|im_start|>user
+What's playing at the moment?<|im_end|>
+<|im_start|>assistant
+[{"tool": "now_playing", "args": {}}]<|im_end|>
+<|im_start|>user
+Show me the text I copied last.<|im_end|>
+<|im_start|>assistant
+[{"tool": "clipboard", "args": {}}]<|im_end|>
+<|im_start|>user
+Look for my passport scan.<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "passport"}}]<|im_end|>
+<|im_start|>user
+List my saved notes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "notes_list", "args": {}}]<|im_end|>
+<|im_start|>user
+Mute it.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}]<|im_end|>
+<|im_start|>user
+Open Firefox and set a timer for 10 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {}}, {"tool": "set_timer", "args": {}}]<|im_end|>
+<|im_start|>user
+Mute the sound and tell me what time it is.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {}}, {"tool": "get_time", "args": {}}]<|im_end|>
+<|im_start|>user
+Set the volume to 30 and then pause the music.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {}}, {"tool": "media", "args": {}}]<|im_end|>
+<|im_start|>user
+Take a note that I need milk and remind me in 20 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {}}, {"tool": "remind", "args": {}}]<|im_end|>

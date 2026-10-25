@@ -1,0 +1,2339 @@
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Find my insurance letter and read it.<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "insurance"}}]<|im_end|>
+<|im_start|>user
+Results:
+1 match(es):
+~/Documents/insurance-letter.txt
+If the request needs another step, give the next call; otherwise answer [{"tool": "done", "args": {}}].<|im_end|>
+<|im_start|>assistant
+[{"tool": "read_file", "args": {"path": "~/Documents/insurance-letter.txt"}}]<|im_end|>
+<|im_start|>user
+Results:
+~/Documents/insurance-letter.txt:
+Your policy renews on 3 March.
+If the request needs another step, give the next call; otherwise answer [{"tool": "done", "args": {}}].<|im_end|>
+<|im_start|>assistant
+[{"tool": "done", "args": {}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Should I learn Spanish or Japanese first if I want to travel a lot?<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Plan a two day trip to Rome.<|im_end|>
+<|im_start|>assistant
+Day one: the Colosseum, Roman Forum and Palatine Hill in the morning, then the Pantheon and Trevi Fountain in the evening. Day two: the Vatican Museums and St Peter's, then Trastevere for dinner.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What day of the week is it?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Bring the sound back.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "off"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Who painted the Mona Lisa?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Run ls in my Downloads folder.<|im_end|>
+<|im_start|>assistant
+[{"tool": "run_command", "args": {"command": "ls ~/Downloads"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Explain what this regex does: ^\\d{3}-\\d{4}$<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+List the files in my Downloads folder.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Set a timer for 20 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 20}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Tell me a joke.<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Look up the weather in Lisbon online.<|im_end|>
+<|im_start|>assistant
+[{"tool": "web_search", "args": {"query": "weather in Lisbon"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What's the difference between a list and a tuple in Python?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+A bat and a ball cost $1.10 in total and the bat costs $1 more than the ball. How much is the ball?<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Take me to news.ycombinator.com.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_url", "args": {"url": "https://news.ycombinator.com"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What reminders do I have?<|im_end|>
+<|im_start|>assistant
+[{"tool": "reminders_list", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Search the web for rust tutorials.<|im_end|>
+<|im_start|>assistant
+[{"tool": "web_search", "args": {"query": "rust tutorials"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Locate my vacation photos.<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "vacation"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Which file talks about the mortgage rate?<|im_end|>
+<|im_start|>assistant
+[{"tool": "search_text", "args": {"query": "mortgage rate"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Find my groceries list and read it to me.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+How do I read a file line by line in Go?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Tell me the time.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Locate my invoices folder.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Put a five minute timer on.<|im_end|>
+<|im_start|>assistant
+[{"tool": "set_timer", "args": {"minutes": 5}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Outline a study plan for passing a calculus exam in two weeks.<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Silence the speakers.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Turn on Wi-Fi.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Turn the sound up to 65.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 65}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Write a bash script that renames all .txt files to .md.<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Explain what a hash map is.<|im_end|>
+<|im_start|>assistant
+A hash map stores key-value pairs and uses a hash function to turn each key into a position in an array, so lookups, inserts and deletes take about constant time on average.<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Good morning!<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+How do I reverse a list in Python?<|im_end|>
+<|im_start|>assistant
+Use my_list.reverse() to reverse it in place, or my_list[::-1] to get a reversed copy.<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What is 56 times 12?<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What's the current time?<|im_end|>
+<|im_start|>assistant
+[{"tool": "get_time", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Read the page at https://example.org.<|im_end|>
+<|im_start|>assistant
+[{"tool": "web_fetch", "args": {"url": "https://example.org"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Help me decide between two job offers based on salary, commute, and growth.<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Convert this SQL query to use a JOIN instead of a subquery.<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Pause the song and set the volume to 10.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "play_pause"}}, {"tool": "volume", "args": {"level": 10}}]<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Why is the sky blue?<|im_end|>
+<|im_start|>assistant
+Air molecules scatter short blue wavelengths of sunlight more than longer red ones, so blue light reaches your eyes from every direction.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Shush the computer.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Save the text hello into hi.txt in my Documents folder.<|im_end|>
+<|im_start|>assistant
+[{"tool": "write_file", "args": {"path": "~/Documents/hi.txt", "text": "hello"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+My C++ program segfaults when I access a vector, why?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+If 3 workers build a wall in 6 hours, how long do 2 workers take?<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Start the image editor.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "image editor"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Is my battery low?<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Turn it down to 20.<|im_end|>
+<|im_start|>assistant
+[{"tool": "volume", "args": {"level": 20}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What does 'ephemeral' mean?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What's the capital of Canada?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Open the file ~/Documents/plan.md.<|im_end|>
+<|im_start|>assistant
+[{"tool": "read_file", "args": {"path": "~/Documents/plan.md"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Nudge me in 40 minutes to check the laundry.<|im_end|>
+<|im_start|>assistant
+[{"tool": "remind", "args": {"minutes": 40, "text": "check the laundry"}}]<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Give me three tips for a job interview.<|im_end|>
+<|im_start|>assistant
+Research the company beforehand, prepare examples of your work using the STAR method, and ask thoughtful questions at the end.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Where did I put the lease agreement?<|im_end|>
+<|im_start|>assistant
+[{"tool": "find_files", "args": {"query": "lease"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What timers are going?<|im_end|>
+<|im_start|>assistant
+[{"tool": "reminders_list", "args": {}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Connect to my Bluetooth headphones.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What is the boiling point of water?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Show me what's inside notes.txt in my Documents.<|im_end|>
+<|im_start|>assistant
+[{"tool": "read_file", "args": {"path": "~/Documents/notes.txt"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Search the web for good pasta recipes.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Open the terminal and make a note that the build is done.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "terminal"}}, {"tool": "note_add", "args": {"text": "the build is done"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Pause the music.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Which song is on?<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Why am I getting a NullPointerException in Java?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Good morning!<|im_end|>
+<|im_start|>assistant
+Good morning! How can I help you today?<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+List what is in the Pictures folder.<|im_end|>
+<|im_start|>assistant
+[{"tool": "list_dir", "args": {"path": "~/Pictures"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What is 365 times 24?<|im_end|>
+<|im_start|>assistant
+[{"tool": "calculate", "args": {"expression": "365*24"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Save a file called shopping.txt in Documents containing eggs and rice.<|im_end|>
+<|im_start|>assistant
+[{"tool": "write_file", "args": {"path": "~/Documents/shopping.txt", "text": "eggs and rice"}}]<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Tell me a short joke.<|im_end|>
+<|im_start|>assistant
+Why did the scarecrow win an award? He was outstanding in his field.<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Why is my JavaScript promise returning undefined?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Which of my files mentions the passport number?<|im_end|>
+<|im_start|>assistant
+[{"tool": "search_text", "args": {"query": "passport number"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What did I copy?<|im_end|>
+<|im_start|>assistant
+[{"tool": "clipboard", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Check my files and tell me what my wifi password is.<|im_end|>
+<|im_start|>assistant
+[{"tool": "search_text", "args": {"query": "wifi password"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Jot down that the meeting moved to 3pm.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What's in my copy buffer?<|im_end|>
+<|im_start|>assistant
+[{"tool": "clipboard", "args": {}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Estimate how many piano tuners work in Chicago.<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Mute the sound and tell me the time.<|im_end|>
+<|im_start|>assistant
+[{"tool": "mute", "args": {"state": "on"}}, {"tool": "get_time", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Run df -h for me.<|im_end|>
+<|im_start|>assistant
+[{"tool": "run_command", "args": {"command": "df -h"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+What's 84 divided by 7?<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Open the browser and set a timer for 5 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "browser"}}, {"tool": "set_timer", "args": {"minutes": 5}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Turn on dark mode.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Hit pause on the video.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "play_pause"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Who sings this?<|im_end|>
+<|im_start|>assistant
+[{"tool": "now_playing", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+Thanks, that's all.<|im_end|>
+<|im_start|>assistant
+You're welcome! Let me know if you need anything else.<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+What's the capital of Australia?<|im_end|>
+<|im_start|>assistant
+The capital of Australia is Canberra.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+How much is 18% of 950?<|im_end|>
+<|im_start|>assistant
+[{"tool": "calculate", "args": {"expression": "18% of 950"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Lower the screen brightness to 30 percent.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Read me my todo notes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "notes_list", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+How's my computer doing?
+
+[Looked up on this computer: memory: 12.1 GB free out of 24.5 GB total; home disk: 40G free, 90% full; battery 64% (discharging)]
+Answer in one or two short sentences using only that.<|im_end|>
+<|im_start|>assistant
+You have 12.1 GB of memory free, 40 GB of disk space left, and the battery is at 64% and discharging.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Is the laptop on battery?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Previous song please.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "previous"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Hi there!<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Remind me to stretch in 30 minutes.<|im_end|>
+<|im_start|>assistant
+[{"tool": "remind", "args": {"minutes": 30, "text": "stretch"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Mute my microphone.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+What time is it?
+
+[Looked up on this computer: Saturday, October 24, 2026, 4:53 AM]
+Answer in one or two short sentences using only that.<|im_end|>
+<|im_start|>assistant
+It's 4:53 AM on Saturday, October 24, 2026.<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Thanks, that's all.<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Set an alarm for 7 AM.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Read https://www.rust-lang.org and summarise it.<|im_end|>
+<|im_start|>assistant
+[{"tool": "web_fetch", "args": {"url": "https://www.rust-lang.org"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Write a function to check if a number is prime in JavaScript.<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Note to self: call mom on Sunday.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {"text": "call mom on Sunday"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Who wrote Romeo and Juliet?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+How many legs does a spider have?<|im_end|>
+<|im_start|>assistant
+answer_directly<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Is my laptop charged?<|im_end|>
+<|im_start|>assistant
+[{"tool": "system_status", "args": {}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Play the next song.<|im_end|>
+<|im_start|>assistant
+[{"tool": "media", "args": {"action": "next"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Show me what I wrote down.<|im_end|>
+<|im_start|>assistant
+[{"tool": "notes_list", "args": {}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+I have $500 a month for groceries for a family of four; help me budget it.<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Take me to wikipedia.org.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_url", "args": {"url": "https://wikipedia.org"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Close all Firefox windows.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+How do I reverse a string in Python?<|im_end|>
+<|im_start|>assistant
+coding<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Which track is on?<|im_end|>
+<|im_start|>assistant
+[{"tool": "now_playing", "args": {}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+My houseplant's leaves are turning yellow; what are the likely causes and how do I narrow it down?<|im_end|>
+<|im_start|>assistant
+reasoning<|im_end|>
+
+<|im_start|>system
+You are Jarvis, a helpful personal assistant running locally on the user's own device. Answer accurately and concisely. If you don't know something, say so.<|im_end|>
+<|im_start|>user
+What is 365 times 24?
+
+[Looked up on this computer: 365*24 = 8760]
+Answer in one or two short sentences using only that.<|im_end|>
+<|im_start|>assistant
+365 times 24 is 8,760.<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What is 45 plus 38?<|im_end|>
+<|im_start|>assistant
+[{"tool": "calculate", "args": {"expression": "45+38"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Open the file manager.<|im_end|>
+<|im_start|>assistant
+[{"tool": "open_app", "args": {"name": "file manager"}}]<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+Write this down: pick up the parcel on Tuesday.<|im_end|>
+<|im_start|>assistant
+[{"tool": "note_add", "args": {"text": "pick up the parcel on Tuesday"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Create a file called todo.txt with my tasks in it.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>
+
+<|im_start|>system
+You control this computer through tools. Available tools:
+- set_timer(...)  // start a countdown timer that rings after some minutes
+- remind(...)  // remind the user about something after some minutes
+- volume(...)  // set the speaker volume, 0-100
+- mute(...)  // turn the speaker sound off or on (muting)
+- media(...)  // play, pause or skip the music or video player (not the volume)
+- open_app(...)  // launch an installed application by name
+- open_url(...)  // show the user a web page in their browser (to read a page yourself, use web_fetch)
+- note_add(...)  // save a short note
+- calculate(...)  // exact arithmetic, e.g. 7^3+4*7*2-3 (use * / ^ sqrt() sin() ln() pi)
+- get_time(...)  // the current time, date or day of the week
+- system_status(...)  // battery, memory, disk space, load and uptime
+- now_playing(...)  // which song or video is playing (not the time)
+- clipboard(...)  // read the text on the clipboard
+- find_files(...)  // find files by part of their NAME (not what is inside them)
+- reminders_list(...)  // show the pending timers and reminders
+- list_dir(...)  // list the files in a folder (~ is the home folder)
+- search_text(...)  // search INSIDE the user's files for words; use it for questions about their own information such as money, plans, passwords or dates
+- read_file(...)  // read a text file
+- write_file(...)  // create or replace a text file (asks the user first)
+- run_command(...)  // run a terminal command (asks the user first)
+- web_search(...)  // search the web (needs internet access to be on)
+- web_fetch(...)  // read the text of a web page so you can tell the user what it says (needs internet access)
+- notes_list(...)  // show the saved notes
+Respond with ONLY a JSON array of 1 to 3 tool calls, in the order to do them, and nothing else.<|im_end|>
+<|im_start|>user
+What files are in my Documents folder?<|im_end|>
+<|im_start|>assistant
+[{"tool": "list_dir", "args": {"path": "~/Documents"}}]<|im_end|>
+
+<|im_start|>system
+Classify the user's request into exactly one category and reply with ONLY the category name.
+answer_directly: casual chat or a simple fact.
+coding: writing, fixing, or explaining code.
+reasoning: multi-step problems, planning, analysis, or math word problems.
+device_control: doing things on this computer: apps, settings, timers, reminders, volume, music; looking up live facts (time, battery, files, clipboard, notes) or the web; reading, listing or creating files; running commands; exact arithmetic; saving notes.<|im_end|>
+<|im_start|>user
+Add 1,250 and 3,475.<|im_end|>
+<|im_start|>assistant
+device_control<|im_end|>

@@ -20,6 +20,12 @@ Design, fixed before any results (one variable at a time):
     IQ4_XS+imat, IQ3_M+imat. KL divergence is measured vs Q5_K_M+imat,
     not vs f16, because f16 can't run on the GPU.
 """
+import os as _os, sys as _sys
+# DISABLED 2026-10-12: 7B runs crashed the GPU/system twice (hard reboots).
+# Never run automatically; only on the user's explicit request.
+if _os.environ.get("OJP_USER_APPROVED_7B") != "yes":
+    _sys.exit("7B tests are disabled (see RESULTS.md); refusing to run.")
+
 
 import fcntl
 import json
@@ -34,8 +40,8 @@ from pathlib import Path
 HERE = Path(__file__).parent
 STUDY = HERE / "outputs" / "7b-study"
 STEPS, LOGS, MODELS = STUDY / "steps", STUDY / "logs", STUDY / "models"
-BIN = Path("/tmp/llama-cpp-convert/build-vk/bin")
-CONVERT = Path("/tmp/llama-cpp-convert/convert_hf_to_gguf.py")
+BIN = Path("/media/openjarvisproject-model-tooling/llama.cpp/build-vk/bin")
+CONVERT = Path("/media/openjarvisproject-model-tooling/llama.cpp/convert_hf_to_gguf.py")
 PY = HERE / ".venv-cpu" / "bin" / "python"
 SNAPSHOT = next((HERE / ".hf-cache/hub/models--Qwen--Qwen2.5-7B-Instruct/snapshots").iterdir())
 os.environ["VK_ICD_FILENAMES"] = "/usr/share/vulkan/icd.d/radeon_icd.json"
@@ -85,6 +91,18 @@ class StepError(Exception):
         self.kind, self.detail = kind, detail
 
 
+COOLDOWN = 60
+
+
+def gpu_ready():
+    """Strictly one GPU job at a time: refuse to start if the GPU looks lost or still busy."""
+    out = subprocess.run(["vulkaninfo", "--summary"], capture_output=True, text=True).stdout
+    if "RADV" not in out:
+        log("GPU not visible; stopping so it is not hammered")
+        sys.exit(1)
+    time.sleep(COOLDOWN)  # let the card cool/settle between jobs
+
+
 def step(name, fn):
     """Run fn once ever (result saved); retry failures on later runs."""
     done = STEPS / f"{name}.json"
@@ -94,6 +112,7 @@ def step(name, fn):
     attempts = json.loads(fail.read_text())["attempts"] if fail.exists() else 0
     if attempts >= MAX_ATTEMPTS:
         return None
+    gpu_ready()
     log(f"START {name} (attempt {attempts + 1})")
     start = time.time()
     try:

@@ -14,7 +14,7 @@ from transformers import AutoModelForCausalLM
 
 from evalharness import test_ppl
 
-CONVERT = "/tmp/llama-cpp-convert/convert_hf_to_gguf.py"
+CONVERT = "/media/openjarvisproject-model-tooling/llama.cpp/convert_hf_to_gguf.py"
 QUANTIZE = "/tmp/llama-cpp-convert/build/bin/llama-quantize"
 TOKENIZER = "Qwen/Qwen2.5-0.5B-Instruct"
 OUT = Path("outputs/combo")
