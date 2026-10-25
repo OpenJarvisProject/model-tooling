@@ -266,6 +266,64 @@ Findings:
   Perplexity alone would not have shown this.
 - Below 4 bits quality falls quickly (IQ3_M +12.5%, 2-bit +49%).
 
+## 7. Qwen3.5 (official Apache-2.0 weights): quantization study and task tests
+
+Source: unsloth's BF16 GGUF conversions of the official Qwen3.5-0.8B/2B/4B
+(`qwen35/`). Same method as section 6 (wikitext-2 imatrix, wikitext-2 test
+ppl, 64 chunks, Vulkan). llama.cpp cbe28bb. Reference is Q8_0.
+
+| Variant | 0.8B MB / ppl | 2B MB / ppl | 4B MB / ppl |
+|---|---|---|---|
+| Q8_0 | 812 / 17.61 | 2012 / 12.10 | 4482 / 9.60 |
+| Q4_K_M | 529 / 18.19 | 1274 / 12.77 | 2709 / 10.01 |
+| Q4_K_M + imatrix | 529 / 18.60 | 1274 / 12.35 | 2709 / 9.77 |
+| Q4_K_M + imat + emb q5_K | 496 / 18.74 | 1207 / 12.34 | 2624 / 9.76 |
+| IQ4_XS + imatrix | 504 / 18.78 | 1196 / 12.51 | 2514 / 9.83 |
+| IQ3_M + imatrix | 454 / 19.16 | 1059 / 13.21 | 2163 / 10.52 |
+| Q2_K + imatrix | 422 / 30.1 | 969 / 17.1 | 1916 / 11.65 |
+
+Error bars are about ±0.4 (0.8B), ±0.27 (2B), ±0.2 (4B).
+- imatrix helps at 2B and 4B, as it did for Qwen2.5; at 0.8B it is within noise.
+- Qwen3.5's 248K-token vocabulary makes the embedding table large, so
+  `--token-embedding-type q5_K` saves 70-90 MB for no measurable loss at 2B and 4B.
+- Below 4 bits quality falls as before; Q2_K without imatrix collapses.
+
+Task tests (`ojp-cli route-eval`, `tool-eval`, `agent-eval`; CPU; thinking off
+via `OJP_TEMPLATE=chatml-nothink`; prompts are the ones tuned for Qwen2.5;
+machine under ~1 core of other load, so compare times only within a run of
+this table):
+
+| Model (as main, tool test) | route quick / dev | tool seen / unseen / multi | s per request seen |
+|---|---|---|---|
+| Qwen2.5-1.5B Q4_K_M+imat (baseline) | 10/10 / 22/24 | 38/39, 20/20, 14/14 | 2.3 |
+| Qwen3.5-2B stock Q4_K_M | 9/10 / 20/24 | 33/39, 17/20, 14/14 | 6.8 |
+| Qwen3.5-2B Q4_K_M+imat | 9/10 / 21/24 | 33/39, 19/20, 14/14 | 6.8 |
+| Qwen3.5-2B IQ4_XS+imat | 10/10 / 23/24 | 32/39, 18/20, 14/14 | 7.1 |
+| Qwen3.5-4B stock Q4_K_M | 10/10 / 24/24 | 36/39, 20/20, 14/14 | 16.1 |
+| Qwen3.5-4B Q4_K_M+imat | 10/10 / 24/24 | 35/39, 20/20, 14/14 | 16.0 |
+| Qwen3.5-4B IQ4_XS+imat | 10/10 / 24/24 | 36/39, 20/20, 14/14 | 16.5 |
+
+Router only (0.8B vs the 0.5B router build): Qwen2.5-0.5B 8/10 quick, 19/24 dev;
+Qwen3.5-0.8B Q4_K_M(+imat) 9/10, 18-19/24; Q8_0 10/10, 21/24; IQ4_XS+imat 9/10, 21/24.
+
+Whole assistant (`agent-eval`, 36 tasks, router + main from the table):
+
+| Stack | tasks | memory | wall time |
+|---|---|---|---|
+| Qwen2.5 0.5B + 1.5B | 32/36 | 8/8 | 8m37 |
+| Qwen3.5 0.8B + 2B (Q4_K_M+imat) | 29/36 (28 on the first run) | 8/8 | 10m41 |
+| Qwen3.5 0.8B + 4B (Q4_K_M+imat) | 33/36 (34 once a "$1,200" vs "1200" matching quirk is ignored) | 8/8 | n/a |
+
+- Qwen3.5-2B fails mostly by saying "I can't access your files" or by
+  summing numbers instead of reading them, i.e. it follows the Qwen2.5-tuned
+  tool prompts less well. The 4B follows them as well as the 1.5B did.
+- On CPU the hybrid architecture costs: cold prompt processing is roughly
+  half the speed of Qwen2.5 at the same size, and the app has to snapshot
+  recurrent state instead of trimming it (see `ojp-core/src/model.rs`).
+  Steady-state per-request time for the 2B matches Qwen2.5-1.5B (0.44 s route
+  + 1.8 s tool call); the 4B is about 2x that. Vulkan is faster for both.
+- Not tested: prompts tuned for Qwen3.5, GPU speed in the app, uncensored builds.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
