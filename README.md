@@ -297,3 +297,15 @@ quality comes back. The likely-correct full order is **prune ->
 heal (distill/fine-tune) -> quantize (layers + embeddings)**. Untested
 here: it needs a training loop, which on this machine means CPU or a
 burn/Vulkan path (ROCm is dead on the RX 580).
+
+## `prune_vocab.py` — vocabulary trimming for byte-level BPE models
+
+Drops tokens a typed English assistant never uses from a GGUF's vocabulary
+and embedding matrix (Qwen3.5: 248,320 -> 48,736 tokens, 28% smaller at 2B,
+33% at 0.8B, under 1% worse). Needs `llama-tokenize --ids` output over a
+keep-corpus. Results: `RESULTS.md` section 8.
+
+```bash
+llama-tokenize -m model-BF16.gguf -f vocab/keep-corpus.txt --ids --no-bos --log-disable > vocab/keep-ids.txt
+python prune_vocab.py model-BF16.gguf pruned-BF16.gguf vocab/keep-ids.txt   # then llama-quantize
+```

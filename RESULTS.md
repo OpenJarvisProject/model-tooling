@@ -324,6 +324,63 @@ Whole assistant (`agent-eval`, 36 tasks, router + main from the table):
   + 1.8 s tool call); the 4B is about 2x that. Vulkan is faster for both.
 - Not tested: prompts tuned for Qwen3.5, GPU speed in the app, uncensored builds.
 
+## 8. Shrinking the Qwen3.5 router: vocabulary trimming, embedding precision, RAM
+
+Qwen3.5 has a 248,320-token vocabulary and a tied embedding/output matrix, so
+at 0.8B the embedding alone is 208 MB of the 518 MB Q4_K_M file (a third of
+the model). `prune_vocab.py` keeps the special tokens, the 256 byte tokens,
+every token seen in a keep-corpus (wikitext-2 *train*, the OJP calibration
+texts, the OJP sources and README) and the BPE merge ancestors of those:
+248,320 -> 48,736 tokens. Anything else still tokenizes, just into smaller
+pieces (Chinese and emoji become bytes). Held-out wikitext-2 *test* needs
++0.7% more tokens than with the full vocabulary.
+
+**Quantization within the trimmed vocabulary** (KL divergence from the Q8_0 of
+the same trimmed model, wikitext-2 test, 100 chunks; lower is better):
+
+| 0.8B variant (trimmed vocab) | MB | KLD | same top token |
+|---|---|---|---|
+| Q5_K_M + imatrix | 401 | 0.0116 | 93.9% |
+| **Q4_K_M + imatrix** | **352** | **0.0378** | **89.5%** |
+| Q4_K_M + imat + emb q5_0 | 340 | 0.0423 | 88.7% |
+| Q4_K_M + imat + emb q4_K | 340 | 0.0501 | 87.5% |
+| IQ4_XS + imatrix | 327 | 0.0509 | 87.9% |
+| Q4_K_M, no imatrix | 352 | 0.0602 | 87.0% |
+| Q4_K_M + imat + emb q3_K | 330 | 0.1020 | 80.5% |
+| IQ3_M + imatrix | 305 | 0.1422 | 80.5% |
+
+- The embedding doubles as the output layer, so it hurts more to squeeze
+  than in Qwen2.5: keep it at the default (Q6_K); q3_K or lower is bad.
+- imatrix cuts the error by 37% at 0.8B (the earlier perplexity runs hid this
+  in their ±0.4 noise; KLD is far less noisy than perplexity or the 24-case tests).
+
+**Trimmed vs full vocabulary, same quantization** (bits per byte on the whole
+wikitext-2 test; Q4_K_M + imatrix):
+
+| Model | full vocab MB / bpb | trimmed MB / bpb | smaller | worse |
+|---|---|---|---|---|
+| 0.8B (Q8_0) | 812 / 0.6675 | 439 (Q8) / 0.6721 | | +0.7% |
+| 2B (+emb q5_K) | 1274 / 0.8517 | 917 / 0.8592 | 28% | +0.9% |
+| 4B (+emb q5_K) | 2709 / 0.7719 | 2264 / 0.7780 | 16% | +0.8% |
+
+**The 0.8B router against the 0.5B router it would replace** (`route-eval --dev`,
+24 cases; this machine also runs other work, compare within the table):
+
+| Router | file MB | peak RAM MB | RAM, low-memory mode | ms/request | dev score |
+|---|---|---|---|---|---|
+| Qwen2.5 0.5B (Q4_K_M + imat + q5_0 emb) | 341 | 553 | 494 | 306 | 19/24 |
+| Qwen3.5 0.8B, full vocab, Q4_K_M + imat | 529 | 1039 | 782 | 513 | 19/24 |
+| **Qwen3.5 0.8B, trimmed vocab, Q4_K_M + imat** | **352** | **786** | **529** | 439 (482 low-memory) | 19/24 |
+
+- "Low-memory mode" (`models.low_memory`, `OJP_LOW_MEMORY`): llama.cpp keeps no
+  repacked copy of the weights (-205 MB) and uses 128-token scratch buffers
+  (-50 MB); about 10% slower. The same switch also saves 59 MB on the 0.5B.
+- Trimmed 0.8B router: same disk as the 0.5B (352 vs 341 MB), -33% against the
+  untrimmed 0.8B, RAM within 35 MB of the 0.5B in low-memory mode, same
+  accuracy on the router tests, about 1.4-1.6x the time per request.
+- Whole assistant (36 tasks, trimmed models): 0.8B + 2B 32/36, 0.8B + 4B 34/36
+  (untrimmed: 29/36 and 33-34/36); differences are within run-to-run noise.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
