@@ -617,6 +617,52 @@ smallest safe cut, 16 or more is a little more robust on odd phrasing (wild 40-4
 Recommended router: Qwen2.5-0.5B (uncensored if wanted), vocabulary trimmed, cut to 12-16
 blocks, IQ4_XS, probe fitted on that exact file: 144-177 MB, 220-250 MB RAM, about 60-80 ms.
 
+## 13. Small gains for the probe router (uncensored Qwen2.5-0.5B), and refusal reasons
+
+One change at a time against the baseline (12 of 24 blocks, IQ4_XS, trimmed vocabulary).
+Accuracy: 5-fold CV, 80 held-out requests, 42 wild and 44 fresh wild requests (never fitted).
+RAM is the peak in light mode on the app's CPU build.
+
+| Change | MB | CV | held-out 80 | wild 42 | wild 44 | RAM MB |
+|---|---|---|---|---|---|---|
+| baseline | 145 | 0.997 | 98.8% | 39 | 44 | 220 |
+| + noisy copies of the training requests (typos, lower case, shorthand; 1,149 rows) | 145 | 0.996 | 100% | 39 | 43 | 220 |
+| 16 blocks instead of 12 | 178 | 0.993 | 97.5% | 39 | 44 | 255 |
+| scratch buffer 32 tokens (was 128) | 145 | 0.996 | 100% | 39 | 43 | 201 |
+| vocabulary cut to the 15% most frequent corpus tokens | 126 | 0.994 | 100% | 38 | 43 | 179 |
+| + scratch buffer 32 | 126 | 0.994 | 100% | 38 | 43 | 167 |
+| vocabulary 10% (15k tokens) + scratch buffer 32 | 119 | 0.990 | 100% | 38 | 43 | 153 |
+| **vocabulary 15% + embedding iq4_nl + scratch buffer 32** | **114** | 0.993 | 98.8% | 38 | 43 | **156** |
+
+All accuracy differences are within noise (one or two requests). The memory savers are free:
+-31 MB on disk and -64 MB RAM (-29%) against the baseline. K-quant embedding types are impossible
+for Qwen2.5-0.5B (hidden size 896 is not a multiple of 256); q4_0/iq4_nl work. The light router
+now defaults to 32-token scratch buffers.
+
+**What the uncensored Qwen2.5-0.5B (Q4_K_M, greedy) declines.** 4 of 18 flagged, none of them a
+moral refusal: "Savage roast of my friend who is always late" ("I'm just a computer program and
+don't know your friend's schedule"), "Play a flirty, teasing character..." and "Stay in character
+as a dominant, teasing partner in a consensual adult roleplay" ("I need more information... could you
+provide more details?"), and "angry, profane argument about money" (a false alarm: the dialogue
+itself contains "I can't believe"). The regular 0.5B flatly declines the kiss scene, the
+bloody battle, the roast, the erotic scene, the explicit fan fiction, the roleplay and the
+slasher gore ("I'm sorry, but I can't fulfill/assist with that request"), plus the same two
+confusion cases. Qwen2.5 has no reasoning mode, so there is no stated thought process, only the
+reply.
+
+**GPU layers (`ojp-cli gpu-bench`, RX 580 desktop, Vulkan, tokens per second).**
+
+| Layers on the GPU | Qwen2.5-1.5B generation | prompt | Qwen2.5-0.5B generation | prompt |
+|---|---|---|---|---|
+| 0 | 25.6 | 290 | 64.9 | 720 |
+| about 1/4 | 34.1 | 397 | 41.1 | 770 |
+| about 1/2 | 43.8 | 463 | 36.0 | 829 |
+| about 3/4 | 58.8 | 552 | 32.0 | 898 |
+| all | 95.6 | 729 | 157.3 | 1630 |
+
+The 1.5B speeds up in proportion to the layers moved; the 0.5B is slower with some layers on the
+GPU (the activations cross the bus every token) and only wins with all of them.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
