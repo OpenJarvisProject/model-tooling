@@ -557,7 +557,7 @@ using its probe; "light" router; low-memory router):
 Findings:
 - **Uncensored builds are as capable as the regular ones** (tool test within noise, agent
   tasks 32 vs 31, same perplexity within 0.01 bpb) and refuse none of the 18 prompts,
-  where the regular Qwen3.5 models refuse 3-6 and Qwen2.5 8-11 (Qwen2.5-0.5B's score also
+  where the regular Qwen3.5 models refuse 2-6 and Qwen2.5 8-11 (Qwen2.5-0.5B's score also
   counts its habit of saying sorry). The uncensored build's injection and confirmation
   tests (file text cannot plant a memory or run a command) pass exactly as the regular ones: those
   protections live in the app, not the model.
