@@ -36,11 +36,14 @@ def main():
     ap.add_argument("name"); ap.add_argument("source", type=Path); ap.add_argument("template"); ap.add_argument("role")
     ap.add_argument("--emb", default=None)
     ap.add_argument("--keep-ids", type=Path, default=R / "vocab/keep-ids.txt")
+    ap.add_argument("--only", default=None, help="measure only this variant (stock, imat, trimmed); files are still built as needed")
     ap.add_argument("--keep-variants", action="store_true", help="keep the stock and imatrix files afterwards")
     a = ap.parse_args()
     out = R / "qwen35" / "opt" / a.name; out.mkdir(parents=True, exist_ok=True)
     ev = Path("/media/ojp-eval") / a.name; ev.mkdir(parents=True, exist_ok=True)
     summary = ev / "summary.jsonl"
+    if not a.only and summary.exists() and {json.loads(l).get("variant") for l in summary.read_text().splitlines()} >= {"stock", "imat", "trimmed"}:
+        print("already done:", a.name); return
     log = lambda d: (summary.open("a").write(json.dumps(d) + "\n"), print(json.dumps(d), flush=True))
 
     imat = out / "imatrix.gguf"
@@ -67,6 +70,8 @@ def main():
 
     env = {**os.environ, "OJP_CLI": CLI, "OJP_TEMPLATE": a.template, "OJP_N_CTX": "2048", "OJP_LOW_MEMORY": "1"}
     for name, f in variants.items():
+        if a.only and name != a.only:
+            continue
         row = {"model": a.name, "variant": name, "mb": round(f.stat().st_size / 1e6)}
         for k, p in FILES.items(): row[f"bpb_{k}"] = bpb(f, p)
         ref = subprocess.run([CLI, "refusal-eval", f], env=env, capture_output=True, text=True).stdout
@@ -77,7 +82,7 @@ def main():
             g = subprocess.run([CLI, "route-eval", f, "--xl"], env=env, capture_output=True, text=True).stdout
             m = re.search(r"router: (\d+)/80", g); row["generated_xl"] = m and int(m.group(1))
         elif name in ("stock", "trimmed"):
-            t = subprocess.run([CLI, "tool-eval", f], env=env, capture_output=True, text=True).stdout
+            t = subprocess.run([CLI, "tool-eval", f], env={**env, "OJP_N_CTX": "4096"}, capture_output=True, text=True).stdout
             row["tool"] = re.findall(r"full pipeline \(routed AND right tool/args\): (\d+/\d+), mean (\d+) ms", t)
         log(row)
     if not a.keep_variants:
