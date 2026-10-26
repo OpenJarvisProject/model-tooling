@@ -469,6 +469,36 @@ Q8_0 of the same trimmed model, lower is better)
 - Generic text calibrates as well as OJP's own text, even when scored on OJP-style text.
 - The imatrix is worth about 38% of the quantization error in both cases.
 
+## 10. Probe-only routers: cutting layers (`cut_layers.py`)
+
+A router that only feeds a probe never uses the later layers' output as text, so the
+model can be cut to its first N blocks (vocabulary trimmed, IQ4_XS + imatrix, probe fitted
+per file; "light" = one sequence, 1024-token context, low-memory). Probe accuracy is on the
+80 held-out requests with a probe fitted without them; RAM is peak RSS; ms is per request
+on a machine that was also running other work.
+
+| Router | file MB | RAM MB | ms | probe held-out | 5-fold CV |
+|---|---|---|---|---|---|
+| Qwen2.5-0.5B as shipped (generated label, 82% held-out) | 347 | 553 | 207 | 82% | - |
+| Qwen2.5-0.5B trimmed, 24 blocks, probe | 292 | 369 | 121 | 96-97.5% | 99.0% |
+| Qwen2.5-0.5B trimmed, 16 blocks | 177 | 254 | 83 | 97.5% | 99.2% |
+| Qwen2.5-0.5B trimmed, 12 blocks | 144 | 220 | 63 | 100% | 99.2% |
+| Qwen2.5-0.5B trimmed, 8 blocks | 111 | 187 | 47 | 95% | 97.5% |
+| Qwen3.5-0.8B trimmed, 24 blocks, probe | 327 | 455 | 202 | 100% | 99.0% |
+| Qwen3.5-0.8B trimmed, 20 blocks | 280 | - | 167 | 100% | 99.5% |
+| Qwen3.5-0.8B trimmed, 16 blocks | 232 | 344 | 136 | 100% | 99.0% |
+| Qwen3.5-0.8B trimmed, 12 blocks | 185 | - | 249* | 96.3% | 98.0% |
+| Qwen3.5-0.8B trimmed, 8 blocks | 138 | 235 | 75 | 98.8% | 97.6% |
+
+(* measured while other jobs ran.) Both models beat the shipped router on every column
+once they use a probe and are trimmed and cut. At equal treatment the 0.5B is smaller,
+leaner and faster than the 0.8B (it has fewer parameters); the 0.8B is not more accurate
+as a router (both reach about 99% cross-validated). Tool choice from the same hidden
+state (`scripts/make-tool-probe.sh`, 30 classes): 94.5% on 73 held-out requests with the
+0.8B IQ4_XS router; as the first step of tool use it matched the full planner on
+the tool test (36/39 seen, 18-19/20 unseen, 13/14 multi-step) while skipping the
+2,000-token tool prompt for single-tool requests.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
