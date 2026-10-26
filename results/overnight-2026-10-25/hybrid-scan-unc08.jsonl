@@ -1,0 +1,19 @@
+{"label": "base Q4_K_M", "mb": 352.4, "kld": 0.039471, "top_p": 89.277}
+{"label": "attn_qkv -> q6_K", "mb": 365.7, "kld": 0.036601, "top_p": 89.491}
+{"label": "ffn_down -> q6_K", "mb": 363.8, "kld": 0.035707, "top_p": 89.712}
+{"label": "ffn_gate -> q6_K", "mb": 375.1, "kld": 0.034937, "top_p": 90.018}
+{"label": "ffn_up -> q6_K", "mb": 375.1, "kld": 0.029821, "top_p": 90.441}
+{"label": "attn_gate -> q6_K", "mb": 362.2, "kld": 0.036094, "top_p": 89.626}
+{"label": "ssm_out -> q6_K", "mb": 362.2, "kld": 0.034918, "top_p": 89.939}
+{"label": "attn_q -> q6_K", "mb": 358.9, "kld": 0.038434, "top_p": 89.277}
+{"label": "attn_output -> q6_K", "mb": 355.7, "kld": 0.036075, "top_p": 89.516}
+{"label": "token_embd -> q8_0", "mb": 364.5, "kld": 0.038706, "top_p": 89.381}
+{"label": "c1 attn_output+ssm_out q6", "mb": 365.4, "kld": 0.032122, "top_p": 90.312}
+{"label": "c2 +attn_gate+ffn_down q6", "mb": 386.5, "kld": 0.024664, "top_p": 91.366}
+{"label": "c3 +ffn_up q6", "mb": 409.2, "kld": 0.014272, "top_p": 93.045}
+{"label": "c4 +ffn_gate q6 (all but qkv,q,embd)", "mb": 431.9, "kld": 0.009866, "top_p": 94.124}
+{"label": "c5 attn_output,ssm_out,attn_gate,ffn_down,ffn_up q5", "mb": 374.1, "kld": 0.019907, "top_p": 92.2}
+{"label": "c6 c5 + ffn_gate q5", "mb": 385.1, "kld": 0.015931, "top_p": 92.849}
+{"label": "c7 ffn_up,ssm_out,attn_output q6 + ffn_down,attn_gate,ffn_gate q5", "mb": 403.5, "kld": 0.012733, "top_p": 93.395}
+{"label": "c9 c6 + attn_q,attn_k,attn_v q5", "mb": 385.5, "kld": 0.01413, "top_p": 93.327}
+{"label": "c10 c9 + attn_qkv q5 (everything q5 except embedding)", "mb": 386.7, "kld": 0.012904, "top_p": 93.762}

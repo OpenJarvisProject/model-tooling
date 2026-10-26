@@ -731,6 +731,63 @@ the quantization level matters a lot: Q5_K_M has 3.5 times less error than Q4_K_
 Q6_K has 9 times less for 101 MB more. The Q5_K_M build as the only model (probe router, no
 main model) completes 31/36 agent tasks (regular 0.8B 29/36, uncensored 0.5B 24/36 in the same test).
 
+## 16. One model for every device: quantization, Qwen3.5 prompt retune, speed-ups, training
+
+**Single-model uncensored Qwen3.5-0.8B (huihui-ai, vocabulary trimmed, generic wikitext imatrix, no
+roleplay calibration).** Tensor-group scan from Q4_K_M (352 MB, KLD 0.0395 against its own Q8_0;
+`hybrid_kld.py`, wikitext-2 test): upgrading one group to q6_K buys, per MB, attn_output 0.00103,
+ssm_out 0.00046, ffn_up 0.00043, attn_gate 0.00035, ffn_down 0.00033, attn_qkv 0.00022, ffn_gate 0.00020,
+attn_q 0.00016, token_embd 0.00006 (KLD per MB).
+
+| Build | MB | KLD |
+|---|---|---|
+| Q4_K_M | 352 | 0.0395 |
+| Q4_K_M + attn_output, ssm_out, attn_gate, ffn_down, ffn_up at q5_K | 374 | 0.0199 |
+| ... + ffn_gate at q5_K | 385 | 0.0159 |
+| everything q5_K except the embedding (q6_K) | 387 | 0.0129 |
+| **Q5_K_M (standard)** | **401** | **0.0110** |
+| Q4_K_M + the same groups at q6_K (c3 / c4) | 409 / 432 | 0.0143 / 0.0099 |
+| Q6_K | 453 | 0.0049 |
+
+Custom mixes land on the same quality-per-MB line as the standard types (the all-q5_K build is 14 MB
+smaller for 17% more error), so the standard Q5_K_M is the recommendation: one file for every device.
+
+**Qwen3.5-only prompt retune** (applies only to the thinking-off ChatML format; `OJP_QWEN35_TUNING=0`
+turns it off): extra planner rules (files and documents are found with find_files/search_text/
+read_file, never recall; read_file only with an exact path; find_files first for a loose name),
+three extra examples, "copy names and numbers exactly" in the answer step, and read_file is only
+forced by the tool probe when the request names a path. For all models: a guessed file name that
+does not exist but matches exactly one file ("recipe.txt" for recipes.txt) now reads that file.
+Probe data gained programming-topic web searches, questions about files and personal facts.
+The 0.8B candidate alone, 36 original scenarios: 31 (no probes) -> 33 (probes) -> 35 (retune).
+12 fresh scenarios written afterwards (files in a new folder, new wording): 12/12 with the tuning,
+10/12 without it; one of the 12 reuses a retune example, so the clean count is 11/11 against 9/11.
+The 36 original scenarios and the tool test are now tuning data for Qwen3.5 (the tool probe was
+fitted on them too: the 39/39 seen result is contaminated); the probe's own held-out accuracy
+is 93%.
+
+**Speed-ups on CPU (Ryzen 5 4500, 6 cores, llama.cpp cbe28bb): none worth keeping.**
+- Draft-model speculation (Qwen2.5-0.5B drafting for 1.5B): slower, 18.0 / 10.9 / 10.3 tok/s at
+  2 / 4 / 6 drafted tokens against 24 plain (about 50% accepted at 2).
+- N-gram speculation (no draft model) on a tool-call prompt: ngram-cache +8% (26.1 vs 24.2),
+  ngram-simple / map-k -13%, ngram-mod no drafts.
+- Qwen3.5-2B's own MTP head (unsloth MTP GGUF, +0.12 GB): 16.5 tok/s at 1 drafted token (63%
+  accepted) against 14.9-16.3 plain, 15.6 at 2, 12.8 at 3 (33% accepted).
+- Threads: 4 / 6 / 8 / 10 / 12 threads gave 17.3 / 18.2 / 16.4 / 10.3 / 1.1 tok/s generation (pp 93 /
+  115 / 119 / 108 / 23) with other jobs running, so the app now defaults to the physical cores
+  (6 here; at most 4 on Arm); inside the app a router prompt took 1966 / 1654 / 1541 ms at 4 / 6 / 8.
+- Kept: probe router (no generation), low-memory mode, light router, recurrent-state snapshots.
+
+**Training with the RX 580 (measured on a 130M-parameter slice of Qwen2.5-0.5B with the trimmed
+vocabulary, llama.cpp `llama-finetune`, F32 full fine-tuning, 256-token sequences):** CPU 6 threads
+122 tok/s, Vulkan GPU 180 tok/s (only about 140 GFLOP/s, 2% of the card's peak). Scaled by parameters:
+0.5B about 40 tok/s CPU and 58 tok/s GPU, 0.8B about 29 and 43 (if the hybrid layers had a backward
+pass, which I have not checked). One million tokens: roughly 5 hours on the GPU, 7 on the CPU, 40
+at one thread. Memory is the wall: full fine-tuning with AdamW needs 16 bytes per parameter (8 GB
+for 0.5B) plus activations, more than the card's 8 GB and about the machine's free RAM; llama.cpp's
+trainer has no LoRA, so a low-memory path would need new code. Vulkan implements all the backward
+operations that trainer uses.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
