@@ -1,0 +1,1 @@
+regular bpb=0.966

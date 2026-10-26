@@ -694,6 +694,43 @@ crude humour, graphic gore. Nothing involving minors or non-consent was tested. 
 - A persona system prompt helps the regular model (29% -> 46%) and barely changes the
   uncensored ones.
 
+## 15. Qwen3.5-0.8B uncensored candidates, and how to quantize the winner
+
+Six builds at Q6_K (near lossless; the opus distill only exists at Q4_K_M), same 48 adult-theme
+prompts as section 14 (plain / persona), the 18-prompt refusal test and English bits per byte.
+Licence tags: Apache-2.0 on all.
+
+| Build | bpb English | refusals of 18 | complied plain / persona | refused plain / persona | repetition |
+|---|---|---|---|---|---|
+| regular Qwen3.5-0.8B (unsloth) | 0.966 | 3 | 75% / 83% | 23% / 17% | 2-4% |
+| **huihui-ai abliterated** | 0.983 | 0 | 90% / **98%** | 2% / 2% | 6-8% |
+| mradermacher "Uncensored" | **0.961** | 0 | 88% / 90% | 8% / 8% | 6-8% |
+| "uncensored-ara" | 0.970 | 0 | 90% / 85% | 4% / 10% | 2-10% |
+| "finetuned-lora-uncensored" | 0.933 | 2 | 48% / 54% | 31% / 27% | 23-25% |
+| amkkk "opus distill" (Q4_K_M) | 0.958 | 1 | 75% / 69% | 23% / 25% | 12-23% |
+
+huihui-ai's build is the most compliant (98% with a persona) at a 1.8% language-quality cost;
+the plain "Uncensored" build has the best perplexity of the compliant ones (88-90% complied). The
+lora and opus builds still refuse a quarter of the adult prompts and repeat themselves.
+
+**Quantizing the chosen build (huihui, vocabulary trimmed; KL divergence from its own Q8_0;
+held-out roleplay-style text = 24 of the model's own replies not used for calibration):**
+
+| Quantization, imatrix | MB | KLD roleplay text | KLD wikitext | same top token (roleplay) |
+|---|---|---|---|---|
+| Q4_K_M, none | 352 | 0.0757 | 0.0614 | 86.0% |
+| Q4_K_M, wikitext | 352 | 0.0486 | 0.0395 | 88.9% |
+| Q4_K_M, roleplay replies only | 352 | 0.0463 | 0.0420 | 88.7% |
+| Q4_K_M, roleplay + wikitext | 352 | 0.0476 | 0.0388 | 89.0% |
+| Q5_K_M, wikitext | 401 | 0.0142 | 0.0110 | 93.4% |
+| Q5_K_M, roleplay + wikitext | 401 | 0.0134 | 0.0113 | 93.9% |
+| Q6_K, roleplay + wikitext | 453 | 0.0056 | 0.0049 | 95.6% |
+
+The calibration text barely matters (roleplay text helps roleplay by 5% and hurts wikitext by 6%);
+the quantization level matters a lot: Q5_K_M has 3.5 times less error than Q4_K_M for 49 MB more,
+Q6_K has 9 times less for 101 MB more. The Q5_K_M build as the only model (probe router, no
+main model) completes 31/36 agent tasks (regular 0.8B 29/36, uncensored 0.5B 24/36 in the same test).
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
