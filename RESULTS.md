@@ -570,6 +570,53 @@ Findings:
   calibration text does not matter; trim then quantize; fit the router probe last, on the
   exact final file.
 
+## 12. Uncensored Qwen2.5 (0.5B router, 1.5B main) and the order-of-operations study
+
+Sources: huihui-ai's abliterated Qwen2.5-0.5B/1.5B-Instruct (f16 GGUFs from mradermacher,
+Apache-2.0 tagged), same tokenizer as the official ones. Same recipe as section 11.
+
+| Model | variant | MB | bpb English | Refusals of 18 | Router probe held-out | Tool test |
+|---|---|---|---|---|---|---|
+| Qwen2.5-0.5B regular | stock / imat / trimmed | 398 / 398 / 292 | 0.915 / 0.913 / 0.918 | 10 / 8 / 11 | 96.3 / 97.5 / 96.3% | |
+| Qwen2.5-0.5B uncensored | stock / imat / trimmed | 398 / 398 / 292 | 0.920 / 0.915 / 0.921 | 4 / 3 / 2 | 97.5 / 97.5 / 97.5% | |
+| Qwen2.5-1.5B regular | stock / trimmed | 986 / 847 | 0.790 / 0.788 | 8 / 10 | | 37/39, 19/20 / 38/39, 19/20 |
+| Qwen2.5-1.5B uncensored | stock / imat / trimmed | 986 / 986 / 847 | 0.909 / 0.896 / 0.906 | 0 / 0 / 0 | | 34/39, 17/20 / 35/39, 17/20 |
+
+- The 0.5B abliteration halves the refusals (8-11 -> 2-4 of 18) without hurting language
+  modelling; the 1.5B reaches 0 of 18 but its English bits per byte rise from 0.79 to 0.90
+  (about 15% worse), and it is weaker in use: with a cut uncensored 0.5B router (16 blocks)
+  and the trimmed uncensored 1.5B as main, the agent test scored 28/36 (regular Qwen2.5
+  stack 31/36, uncensored Qwen3.5 0.8B + 2B stack 32/36).
+- HauhauCS's Qwen3.5 2B/4B kept the official models' bits per byte (0.852 / 0.772), so that
+  builder's models are the better-preserved uncensored option.
+
+**Order-of-operations study, probe router (same file recipe for the regular and uncensored
+0.5B; IQ4_XS unless stated; 12 of 24 blocks unless stated).** Columns: 5-fold CV of the probe,
+accuracy on 80 held-out requests (probe fitted without them), accuracy on 42 wild requests
+(never fitted), light-mode RAM, ms per request (noisy).
+
+| Build | MB | CV | held-out 80 | wild 42 | RAM MB |
+|---|---|---|---|---|---|
+| depth 8 | 111 | 0.968-0.975 | 95-96% | 37 | 186 |
+| depth 12 | 144 | 0.992-0.993 | 100% | 38 | 219 |
+| depth 16 | 177 | 0.990-0.992 | 97.5% | 40 | 253 |
+| depth 20 | 210 | 0.992-0.993 | 97.5-100% | 41 | 287 |
+| 12 blocks, Q4_K_M / Q3_K_M / IQ3_M / Q2_K | 168 / 147 / 140 / 139 | 0.986-0.995 | 100% | 37-38 | 214-243 |
+| 12 blocks, no imatrix | 145 | 0.997 | 98.8-100% | 38-39 | 219 |
+| cut then trim then quantize | 144 | 0.992-0.993 | 100% | 38 | 220 |
+| quantize the full model first, then trim and cut it | 144 | 0.992-0.993 | 100% | 38 | 220 |
+| imatrix measured on the cut model | 144 | 0.992-0.993 | 100% | 38 | 219 |
+| probe fitted on the unquantized cut model, used on IQ4_XS | 144 | - | - | 37-38 | 219 |
+
+Both models behave the same. Conclusions: (1) trimming, cutting and quantizing commute (quantizing first
+and slicing the quantized rows gives the same file quality); (2) the imatrix and the
+quantization level do not matter for a probe router (Q2_K at 139 MB is as good as Q4_K_M); (3) the probe
+can be fitted before quantizing, but fitting it on the final file is just as cheap and exact;
+(4) depth is the only knob that moves the numbers: 8 blocks loses accuracy, 12 is the
+smallest safe cut, 16 or more is a little more robust on odd phrasing (wild 40-41 of 42).
+Recommended router: Qwen2.5-0.5B (uncensored if wanted), vocabulary trimmed, cut to 12-16
+blocks, IQ4_XS, probe fitted on that exact file: 144-177 MB, 220-250 MB RAM, about 60-80 ms.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.

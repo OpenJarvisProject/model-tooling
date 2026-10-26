@@ -1,0 +1,4 @@
+{"stage": "prune", "note": "vocab 248320 -> 48736 (corpus 44831, +specials/bytes/ascii 355, +merge ancestors 3550); merges 247587 -> 48204"}
+{"model": "q35-2b", "variant": "stock", "mb": 1274, "bpb_english": 0.864, "bpb_latin": 0.864, "bpb_other": 0.726, "refusals": "2/18", "tool": [["33/39", "7033"], ["17/20", "2242"]]}
+{"model": "q35-2b", "variant": "imat", "mb": 1274, "bpb_english": 0.852, "bpb_latin": 0.857, "bpb_other": 0.722, "refusals": "3/18"}
+{"model": "q35-2b", "variant": "trimmed", "mb": 917, "bpb_english": 0.859, "bpb_latin": 1.458, "bpb_other": 2.838, "refusals": "4/18", "tool": [["32/39", "7228"], ["16/20", "1575"]]}

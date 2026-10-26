@@ -1,0 +1,6 @@
+{"variant": "full", "mb": 529, "english": 0.9824, "english_tokens": 297193, "latin": 1.0018, "latin_tokens": 15668, "other": 0.8318, "other_tokens": 14797}
+{"variant": "top2.5", "mb": 318, "english": 1.2864, "english_tokens": 351470, "latin": 2.4762, "latin_tokens": 26955, "other": 3.5016, "other_tokens": 76170}
+{"variant": "top5", "mb": 324, "english": 1.1292, "english_tokens": 323906, "latin": 2.2024, "latin_tokens": 25010, "other": 3.5077, "other_tokens": 76150}
+{"variant": "top10", "mb": 335, "english": 1.028, "english_tokens": 306020, "latin": 1.9354, "latin_tokens": 23068, "other": 3.4668, "other_tokens": 69263}
+{"variant": "top15", "mb": 346, "english": 0.9987, "english_tokens": 300677, "latin": 1.7433, "latin_tokens": 21497, "other": 3.295, "other_tokens": 49568}
+{"variant": "allseen", "mb": 352, "english": 0.9892, "english_tokens": 299191, "latin": 1.6338, "latin_tokens": 20726, "other": 2.8521, "other_tokens": 37513}

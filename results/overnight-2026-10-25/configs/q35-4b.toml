@@ -1,0 +1,8 @@
+[models]
+router = "/media/openjarvisproject-model-tooling/qwen35/cand-0.8b/imat-Q4_K_M.gguf"
+main = "/media/openjarvisproject-model-tooling/qwen35/cand-4b/imat-Q4_K_M.gguf"
+chat_template = "chatml-nothink"
+main_enabled = true
+gpu_layers = 0
+[tts]
+enabled = false

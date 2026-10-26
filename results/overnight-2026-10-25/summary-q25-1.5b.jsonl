@@ -1,0 +1,3 @@
+{"model": "q25-1.5b", "variant": "stock", "mb": 986, "bpb_english": 0.79, "bpb_latin": 0.917, "bpb_other": 0.76, "refusals": "8/18", "tool": [["37/39", "2479"], ["19/20", "1763"]]}
+{"model": "q25-1.5b", "variant": "imat", "mb": 986, "bpb_english": 0.781, "bpb_latin": 0.91, "bpb_other": 0.754, "refusals": "10/18"}
+{"model": "q25-1.5b", "variant": "trimmed", "mb": 847, "bpb_english": 0.788, "bpb_latin": 1.407, "bpb_other": 3.052, "refusals": "10/18", "tool": [["38/39", "2046"], ["19/20", "1333"]]}

@@ -1,0 +1,8 @@
+{"variant": "Q8_0", "mb": 585, "cv": 0.992, "xl_heldout": 1.0, "rss_mb": 839, "ms": 167}
+{"variant": "Q5_K_M", "mb": 401, "cv": 0.993, "xl_heldout": 0.988, "rss_mb": 839, "ms": 174}
+{"variant": "Q4_K_M", "mb": 352, "cv": 0.993, "xl_heldout": 0.988, "rss_mb": 839, "ms": 173}
+{"variant": "IQ4_XS", "mb": 327, "cv": 0.99, "xl_heldout": 1.0, "rss_mb": 839, "ms": 212}
+{"variant": "Q3_K_M", "mb": 289, "cv": 0.992, "xl_heldout": 0.988, "rss_mb": 839, "ms": 209}
+{"variant": "IQ3_M", "mb": 277, "cv": 0.995, "xl_heldout": 1.0, "rss_mb": 839, "ms": 216}
+{"variant": "IQ3_XXS", "mb": 248, "cv": 0.988, "xl_heldout": 0.988, "rss_mb": 839, "ms": 214}
+{"variant": "Q2_K", "mb": 245, "cv": 0.985, "xl_heldout": 0.975, "rss_mb": 839, "ms": 206}

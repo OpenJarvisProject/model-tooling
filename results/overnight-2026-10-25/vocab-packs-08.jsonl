@@ -1,0 +1,7 @@
+{"variant": "base", "mb": 352, "vocab": "48736", "english": 0.989, "latin": 1.634, "ru": 2.616, "ja": 3.142, "ar": 2.726}
+{"variant": "latin-ext", "mb": 364, "vocab": "61503", "english": 0.987, "latin": 1.519, "ru": 2.615, "ja": 3.143, "ar": 2.726}
+{"variant": "cyrillic", "mb": 369, "vocab": "67184", "english": 0.989, "latin": 1.634, "ru": 0.62, "ja": 3.143, "ar": 2.727}
+{"variant": "arabic", "mb": 360, "vocab": "57457", "english": 0.99, "latin": 1.628, "ru": 2.611, "ja": 3.142, "ar": 0.903}
+{"variant": "cjk", "mb": 405, "vocab": "107256", "english": 0.988, "latin": 1.635, "ru": 2.618, "ja": 1.08, "ar": 2.728}
+{"variant": "euro3", "mb": 382, "vocab": "81375", "english": 0.988, "latin": 1.517, "ru": 0.621, "ja": 3.142, "ar": 2.727}
+{"variant": "all", "mb": 454, "vocab": "162737", "english": 0.986, "latin": 1.514, "ru": 0.628, "ja": 1.081, "ar": 0.905}

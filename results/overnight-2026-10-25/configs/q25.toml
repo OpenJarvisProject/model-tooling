@@ -1,0 +1,7 @@
+[models]
+router = "/home/zexolver/.local/share/ojp/models/router.gguf"
+main = "/home/zexolver/.local/share/ojp/models/main.gguf"
+main_enabled = true
+gpu_layers = 0
+[tts]
+enabled = false

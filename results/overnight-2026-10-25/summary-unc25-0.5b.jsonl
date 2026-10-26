@@ -1,0 +1,4 @@
+{"stage": "prune", "note": "vocab 151936 -> 45154 (corpus 41817, +specials/bytes/ascii 381, +merge ancestors 2956); merges 151387 -> 44605"}
+{"model": "unc25-0.5b", "variant": "stock", "mb": 398, "bpb_english": 0.92, "bpb_latin": 1.132, "bpb_other": 0.91, "refusals": "4/18", "probe_cv": 0.986, "probe_xl_heldout": 0.975, "generated_xl": 66}
+{"model": "unc25-0.5b", "variant": "imat", "mb": 398, "bpb_english": 0.915, "bpb_latin": 1.126, "bpb_other": 0.906, "refusals": "3/18", "probe_cv": 0.985, "probe_xl_heldout": 0.975, "generated_xl": 61}
+{"model": "unc25-0.5b", "variant": "trimmed", "mb": 292, "bpb_english": 0.921, "bpb_latin": 1.616, "bpb_other": 3.219, "refusals": "2/18", "probe_cv": 0.983, "probe_xl_heldout": 0.975, "generated_xl": 61}

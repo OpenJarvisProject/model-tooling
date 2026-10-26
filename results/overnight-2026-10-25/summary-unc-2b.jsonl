@@ -1,0 +1,4 @@
+{"stage": "prune", "note": "vocab 248320 -> 48736 (corpus 44831, +specials/bytes/ascii 355, +merge ancestors 3550); merges 247587 -> 48204"}
+{"model": "unc-2b", "variant": "stock", "mb": 1274, "bpb_english": 0.865, "bpb_latin": 0.865, "bpb_other": 0.727, "refusals": "0/18", "tool": [["34/39", "6859"], ["17/20", "2151"]]}
+{"model": "unc-2b", "variant": "imat", "mb": 1274, "bpb_english": 0.852, "bpb_latin": 0.858, "bpb_other": 0.724, "refusals": "0/18"}
+{"model": "unc-2b", "variant": "trimmed", "mb": 917, "bpb_english": 0.86, "bpb_latin": 1.46, "bpb_other": 2.854, "refusals": "0/18", "tool": [["30/39", "7032"], ["18/20", "1559"]]}

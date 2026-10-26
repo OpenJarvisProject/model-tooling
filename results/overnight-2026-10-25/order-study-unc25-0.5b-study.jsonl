@@ -1,0 +1,14 @@
+{"study": "depth 8 of 24, trim>cut>quant, IQ4_XS", "mb": 111, "cv": 0.968, "xl_heldout_fit": 0.963, "xl_with_given_probe": 80, "wild_of_42": 37, "ms": 43, "ram_mb": 186}
+{"study": "depth 12 of 24, trim>cut>quant, IQ4_XS", "mb": 144, "cv": 0.993, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 58, "ram_mb": 219}
+{"study": "depth 16 of 24, trim>cut>quant, IQ4_XS", "mb": 177, "cv": 0.99, "xl_heldout_fit": 0.975, "xl_with_given_probe": 80, "wild_of_42": 40, "ms": 74, "ram_mb": 253}
+{"study": "depth 20 of 24, trim>cut>quant, IQ4_XS", "mb": 210, "cv": 0.993, "xl_heldout_fit": 0.975, "xl_with_given_probe": 80, "wild_of_42": 41, "ms": 93, "ram_mb": 287}
+{"study": "12 blocks, Q4_K_M", "mb": 168, "cv": 0.992, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 61, "ram_mb": 243}
+{"study": "12 blocks, Q3_K_M", "mb": 147, "cv": 0.995, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 37, "ms": 56, "ram_mb": 222}
+{"study": "12 blocks, IQ3_M", "mb": 140, "cv": 0.986, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 58, "ram_mb": 216}
+{"study": "12 blocks, Q2_K", "mb": 139, "cv": 0.988, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 37, "ms": 58, "ram_mb": 214}
+{"study": "12 blocks, IQ4_XS, no imatrix", "mb": 145, "cv": 0.997, "xl_heldout_fit": 0.988, "xl_with_given_probe": 80, "wild_of_42": 39, "ms": 56, "ram_mb": 219}
+{"study": "order: cut > trim > quant (12, IQ4_XS)", "mb": 144, "cv": 0.993, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 59, "ram_mb": 220}
+{"study": "order: quant > trim > cut (12, IQ4_XS from the full model)", "mb": 144, "cv": 0.993, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 56, "ram_mb": 220}
+{"study": "order: imatrix from the cut model (12, IQ4_XS)", "mb": 144, "cv": 0.993, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 59, "ram_mb": 219}
+{"study": "probe fitted on the unquantized 12-block model (f16), for reference", "mb": 440, "cv": 0.993, "xl_heldout_fit": 1.0, "xl_with_given_probe": 80, "wild_of_42": 38, "ms": 62, "ram_mb": 500}
+{"study": "order: probe fitted before quantizing, used on IQ4_XS", "mb": 144, "cv": null, "xl_heldout_fit": null, "xl_with_given_probe": 80, "wild_of_42": 37, "ms": 62, "ram_mb": 219}

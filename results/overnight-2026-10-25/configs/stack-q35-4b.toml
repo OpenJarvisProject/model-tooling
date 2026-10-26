@@ -1,0 +1,8 @@
+[models]
+router = "/media/openjarvisproject-model-tooling/qwen35/opt/q35-0.8b/trimmed.gguf"
+main = "/media/openjarvisproject-model-tooling/qwen35/opt/q35-4b/trimmed.gguf"
+chat_template = "chatml-nothink"
+main_enabled = true
+gpu_layers = 0
+[tts]
+enabled = false

@@ -1,0 +1,12 @@
+wikitext2-test noimat chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.060185 ± 0.000463 Same top p: 87.012 ± 0.211 % 
+wikitext2-test fullimat chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.037754 ± 0.000289 Same top p: 89.533 ± 0.192 % 
+wikitext2-test wiki chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.037754 ± 0.000289 Same top p: 89.533 ± 0.192 % 
+wikitext2-test mixed chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.038631 ± 0.000326 Same top p: 89.278 ± 0.194 % 
+wikitext2-test tasks chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.039342 ± 0.000289 Same top p: 89.325 ± 0.193 % 
+wikitext2-test wikimixed chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.037754 ± 0.000289 Same top p: 89.533 ± 0.192 % 
+eval-ojp-tasks noimat chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.037849 ± 0.001745 Same top p: 93.377 ± 0.519 % 
+eval-ojp-tasks fullimat chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.023503 ± 0.001028 Same top p: 94.989 ± 0.456 % 
+eval-ojp-tasks wiki chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.023503 ± 0.001028 Same top p: 94.989 ± 0.456 % 
+eval-ojp-tasks mixed chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.024716 ± 0.001098 Same top p: 94.989 ± 0.456 % 
+eval-ojp-tasks tasks chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.025122 ± 0.001176 Same top p: 94.858 ± 0.461 % 
+eval-ojp-tasks wikimixed chunk PPL ln(PPL(Q)/PPL(base)) KL Divergence Δp RMS Same top p Mean KLD: 0.023503 ± 0.001028 Same top p: 94.989 ± 0.456 % 

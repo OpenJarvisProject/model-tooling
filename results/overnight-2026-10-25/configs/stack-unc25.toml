@@ -1,0 +1,8 @@
+[models]
+router = "/media/openjarvisproject-model-tooling/qwen25unc/work/unc25-0.5b-study/std-cut16-IQ4_XS.gguf"
+main = "/media/openjarvisproject-model-tooling/qwen35/opt/unc25-1.5b/trimmed.gguf"
+chat_template = "chatml"
+main_enabled = true
+gpu_layers = 0
+[tts]
+enabled = false

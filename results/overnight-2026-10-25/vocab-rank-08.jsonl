@@ -1,0 +1,4 @@
+{"variant": "rank49k", "mb": 353, "vocab": "49276", "english": 1.088, "latin": 1.53, "ru": 1.711, "ja": 3.832, "ar": 2.721}
+{"variant": "corpus+rank20k", "mb": 357, "vocab": "54342", "english": 0.99, "latin": 1.549, "ru": 2.023, "ja": 2.98, "ar": 2.692}
+{"variant": "corpus+rank40k", "mb": 366, "vocab": "64139", "english": 0.991, "latin": 1.468, "ru": 1.781, "ja": 3.03, "ar": 2.565}
+{"variant": "corpus+rank80k", "mb": 388, "vocab": "89296", "english": 0.986, "latin": 1.328, "ru": 1.507, "ja": 2.98, "ar": 2.295}

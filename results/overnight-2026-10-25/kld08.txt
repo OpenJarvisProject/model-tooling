@@ -1,0 +1,32 @@
+== pruned-Q4_K_M.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.037754 ±   0.000289
+Same top p: 89.533 ± 0.192 %
+== pruned-Q4_K_M-emb_q5_0.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.042315 ±   0.000309
+Same top p: 88.682 ± 0.198 %
+== pruned-Q4_K_M-emb_q4_K.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.050080 ±   0.000346
+Same top p: 87.545 ± 0.207 %
+== pruned-Q4_K_M-emb_q3_K.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.101997 ±   0.000614
+Same top p: 80.490 ± 0.248 %
+== pruned-Q4_K_M-noimat.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.060185 ±   0.000463
+Same top p: 87.012 ± 0.211 %
+== pruned-IQ4_XS.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.050885 ±   0.000398
+Same top p: 87.914 ± 0.204 %
+== pruned-IQ3_M.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.142153 ±   0.001045
+Same top p: 80.506 ± 0.248 %
+== pruned-Q5_K_M.gguf
+chunk             PPL               ln(PPL(Q)/PPL(base))          KL Divergence              Δp RMS            Same top p
+Mean    KLD:   0.011564 ±   0.000084
+Same top p: 93.925 ± 0.150 %

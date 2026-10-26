@@ -1,0 +1,3 @@
+imat-Q4_K_M.gguf ppl=13.1318 tokens=297193 bits/byte=0.8517
+pruned-Q4_K_M.gguf ppl=13.2230 tokens=299191 bits/byte=0.8597
+pruned-Q4_K_M-emb_q5_K.gguf ppl=13.2042 tokens=299191 bits/byte=0.8592
