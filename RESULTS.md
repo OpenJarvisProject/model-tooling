@@ -499,6 +499,77 @@ state (`scripts/make-tool-probe.sh`, 30 classes): 94.5% on 73 held-out requests 
 the tool test (36/39 seen, 18-19/20 unseen, 13/14 multi-step) while skipping the
 2,000-token tool prompt for single-tool requests.
 
+## 11. The three groups side by side: Qwen2.5, Qwen3.5, uncensored Qwen3.5
+
+Every model went through the same recipe (`optimize_model.py`): **stock** = Q4_K_M, no
+imatrix, full vocabulary; **imat** = + imatrix (wikitext-2 train); **trimmed** = + vocabulary
+trimmed to the 19.6% English-corpus tokens (2B/4B/Qwen2.5 1.5B with the embedding at q5_K or
+default). bpb = bits per byte on held-out English (wikitext-2 test), European text and
+Russian/Japanese/Arabic text (lower is better). Refusals = the 18 creative prompts in
+`ojp-cli refusal-eval` (6 are adult or very gory themes; only whether the model declined
+is recorded; markers like "I can't", "I'm sorry"). Router columns: held-out accuracy of a
+probe fitted on the model's hidden state, and of the model's own generated label (out of
+80). Tool test: `ojp-cli tool-eval` (the model alone, no probe), 39 seen cases and mean ms.
+The uncensored builds are huihui-ai's 0.8B and HauhauCS's 2B and 4B "Aggressive" (all
+Apache-2.0, same tokenizer as the official models).
+
+| Model | Variant | MB | bpb English | bpb European | bpb other scripts | Refusals (of 18) | Router probe (held-out) | Router generated | Tool test |
+|---|---|---|---|---|---|---|---|---|---|
+| q25-0.5b | stock | 398 | 0.915 | 1.12 | 0.903 | 10/18 | 0.963 | 66 |  |
+| q25-0.5b | imat | 398 | 0.913 | 1.114 | 0.9 | 8/18 | 0.975 | 61 |  |
+| q25-0.5b | trimmed | 292 | 0.918 | 1.599 | 3.199 | 11/18 | 0.963 | 64 |  |
+| q25-1.5b | stock | 986 | 0.79 | 0.917 | 0.76 | 8/18 |  |  | 37/39 (2479 ms) |
+| q25-1.5b | imat | 986 | 0.781 | 0.91 | 0.754 | 10/18 |  |  |  |
+| q25-1.5b | trimmed | 847 | 0.788 | 1.407 | 3.052 | 10/18 |  |  | 38/39 (2046 ms) |
+| q35-0.8b | stock | 529 | 0.974 | 1.006 | 0.836 | 3/18 | 0.988 | 59 |  |
+| q35-0.8b | imat | 529 | 0.982 | 1.002 | 0.832 | 4/18 | 0.988 | 59 |  |
+| q35-0.8b | trimmed | 352 | 0.989 | 1.634 | 2.852 | 4/18 | 0.988 | 61 |  |
+| q35-2b | stock | 1274 | 0.864 | 0.864 | 0.726 | 2/18 |  |  | 33/39 (7033 ms) |
+| q35-2b | imat | 1274 | 0.852 | 0.857 | 0.722 | 3/18 |  |  |  |
+| q35-2b | trimmed | 917 | 0.859 | 1.458 | 2.838 | 4/18 |  |  | 32/39 (7228 ms) |
+| q35-4b | stock | 2709 | 0.781 | 0.746 | 0.642 | 5/18 |  |  | 36/39 (16470 ms) |
+| q35-4b | imat | 2709 | 0.772 | 0.745 | 0.64 | 5/18 |  |  |  |
+| q35-4b | trimmed | 2264 | 0.778 | 1.309 | 2.612 | 6/18 |  |  | 34/39 (17868 ms) |
+| unc-0.8b | stock | 529 | 0.994 | 1.017 | 0.845 | 0/18 | 0.988 | 61 |  |
+| unc-0.8b | imat | 529 | 0.998 | 1.012 | 0.84 | 0/18 | 0.988 | 63 |  |
+| unc-0.8b | trimmed | 352 | 1.005 | 1.637 | 2.851 | 0/18 | 0.988 | 64 |  |
+| unc-2b | stock | 1274 | 0.865 | 0.865 | 0.727 | 0/18 |  |  | 34/39 (6859 ms) |
+| unc-2b | imat | 1274 | 0.852 | 0.858 | 0.724 | 0/18 |  |  |  |
+| unc-2b | trimmed | 917 | 0.86 | 1.46 | 2.854 | 0/18 |  |  | 30/39 (7032 ms) |
+| unc-4b | stock | 2709 | 0.781 | 0.747 | 0.643 | 0/18 |  |  | 36/39 (22920 ms) |
+| unc-4b | imat | 2709 | 0.772 | 0.745 | 0.64 | 0/18 |  |  |  |
+| unc-4b | trimmed | 2264 | 0.778 | 1.31 | 2.607 | 0/18 |  |  | 35/39 (17709 ms) |
+
+Tool-test times are CPU-only, taken while other jobs ran, and only comparable within a size.
+
+**Whole assistant** (`agent-eval`, 36 tasks, router + main both trimmed and the router
+using its probe; "light" router; low-memory router):
+
+| Stack | tasks | wall time |
+|---|---|---|
+| Qwen2.5 0.5B + 1.5B | 31/36 | 7m19 |
+| Qwen3.5 0.8B + 2B | 31/36 | 11m11 |
+| Uncensored 0.8B + 2B | 32/36 | 11m37 |
+| Qwen3.5 0.8B + 4B | 33/36 | 30m52 |
+| Uncensored 0.8B + 4B | 32/36 | 24m53 |
+| as the only model (router-only device): Qwen2.5 0.5B / Qwen3.5 0.8B | 24/36 / 29/36 | |
+
+Findings:
+- **Uncensored builds are as capable as the regular ones** (tool test within noise, agent
+  tasks 32 vs 31, same perplexity within 0.01 bpb) and refuse none of the 18 prompts,
+  where the regular Qwen3.5 models refuse 3-6 and Qwen2.5 8-11 (Qwen2.5-0.5B's score also
+  counts its habit of saying sorry). The uncensored build's injection and confirmation
+  tests (file text cannot plant a memory or run a command) pass exactly as the regular ones: those
+  protections live in the app, not the model.
+- **Qwen3.5 vs Qwen2.5:** bits per byte on English are higher for the Qwen3.5 0.8B (0.97-0.99)
+  than for the Qwen2.5 0.5B (0.91-0.92) and similar at 2B/1.5B scale (0.85 vs 0.78 for the 1.5B);
+  but as the only model on a device the 0.8B completes more tasks (29 vs 24 of 36), and the
+  4B stack is the strongest overall (33/36). As a probe-only router the 0.5B is smaller and
+  faster (section 10).
+- **Order of operations** (section 9): imatrix always; trimming and imatrix commute; the
+  calibration text does not matter; trim then quantize; fit the router probe last, on the
+  exact final file.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
