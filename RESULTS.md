@@ -851,6 +851,23 @@ Not tested: a phone or any GPU path in the app, long (hours) sessions, the Andro
 Known limits: the 36 original scenarios and the tool test are tuning data (the tool probe was fitted on them), small-model
 slips on exact numbers in answers remain, and adult-theme compliance moves 10-15 points between runs of the same model.
 
+## 19. Can a router be something that is not a pretrained language model? (`scripts/tiny-router-baseline.py` in ojp)
+
+Hashed word and character n-grams + softmax regression (256 KB for the router, 1.9 MB for the 30 tools; microseconds
+per request), trained on the same 1,452 / 1,438 requests as the probes and scored on the same held-out sets:
+
+| | n-gram model from scratch | probe on the 0.8B (Q5_K_M) |
+|---|---|---|
+| router, 80 held-out | 66% | 98-100% |
+| router, 42 wild | 50% | 95% (40/42) |
+| router, 44 fresh wild | 55% | 98% (43/44) |
+| tool choice, 73 held-out | 77% | 93% |
+
+A model that knows no language beyond a few thousand training sentences cannot generalize to new phrasing; what the
+probes use is the pretrained model's understanding. Any from-scratch replacement would first need that
+understanding (pretraining on billions of tokens: roughly 2.6 B tokens for 128M parameters at 20 tokens per parameter, which is
+about 6 x 128e6 x 2.6e9 = 2e18 FLOPs, at the 140 GFLOP/s measured on the RX 580 about 165 days), or be distilled from a pretrained model.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
