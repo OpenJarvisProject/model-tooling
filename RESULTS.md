@@ -817,6 +817,40 @@ Words with several near-synonyms are mostly rare ones, which the English-corpus 
 tokens, -177 MB) has already removed. Deleting a common word's token forces it to be spelled from
 fragments (longer text, worse quality) and narrows what the model can write.
 
+## 18. Final checks of the shipped single-model bundle (uncensored Qwen3.5-0.8B, Q5_K_M, 401 MB)
+
+`/media/ojp-models/unc-0.8b/`, sha256 in `SHA256SUMS`. All through the real engine on the CPU only, 6 threads,
+the machine also running other work (about 21 GB of swap already in use).
+
+**A speed bug found and fixed.** The soak test (`scripts/final-checks.py`: 70 mixed requests through `ojp-cli chat`)
+showed file and tool requests taking 28-38 s while chat took 0.4-1.5 s. Causes, all in the engine and fixed
+(Qwen2.5 unaffected except where noted): (1) only one recurrent-state snapshot was kept per sequence and it moved
+deeper with every extra tool round, so the shared 2,460-token tool prompt was re-read for every new request;
+there are now up to three snapshots per sequence and the shortest (the shared start) is never evicted;
+(2) round 2 of a task used a tool list with an extra `done()` line, so its prompt differed from round 1 early
+on (every round re-read the tool list); `done` is now explained only in the round messages; (3) the 0.8B never
+says "done" and repeated the same call up to five times; a round of repeats now ends the task (applies to all
+models); (4) `find_files("packing list")` now finds packing-list.txt. Results for the bundle: agent test (36 original +
+12 fresh scenarios) 12 minutes -> 1 min 45 s; file-listing request 28-37 s -> 5 s; soak test tool requests
+mean 11.4 s -> 7.3 s, worst 37 s -> 18.6 s (the worst now are rare very long answers).
+
+| Check | Result |
+|---|---|
+| Agent test, 36 original + 12 fresh, two runs | 46/48 and 46/48 (misses: "food spending", invented a number; "router password", dropped a hyphen) |
+| Same test, Qwen2.5 stack (no probes), as a regression check | 40/48; the original 36 give 32/36 as before |
+| Router probe on requests never fitted (typos, slang, French; 42 and 44) | 40/42 and 43/44 |
+| Tool probe, held out | 93% of 73 |
+| English bits per byte, Q5_K_M vs its Q8_0 | 0.9864 vs 0.9824 (+0.4%) |
+| 18-prompt refusal test | 0 refused |
+| 48 adult-theme prompts, plain / with companion persona | 88% / 81% complied, 6% / 12% refused, repetition 0% / 2% |
+| Soak test, 70 requests | greeting 3.4 s, fact 3.1, roleplay 2.9, coding 3.6, reasoning 8.3, tools 7.3, odd input (Japanese, Russian, emoji, 1,500-character line) 3.8 mean; no crash, no think-tag leak, no empty reply |
+| Memory | 684 MB at start, 1,071 MB after 70 requests (flat from the middle of the run: snapshots, not a leak); load n_ctx 4096 x 3 sequences |
+| Start-up | 0.3 s with the saved cache (first start warms the prompts: about 25 s) |
+
+Not tested: a phone or any GPU path in the app, long (hours) sessions, the Android build with the new engine.
+Known limits: the 36 original scenarios and the tool test are tuning data (the tool probe was fitted on them), small-model
+slips on exact numbers in answers remain, and adult-theme compliance moves 10-15 points between runs of the same model.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.

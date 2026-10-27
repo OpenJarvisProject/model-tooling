@@ -1,0 +1,90 @@
+{
+ "cold start": {
+  "seconds": 0.3,
+  "rss_mb": 684
+ },
+ "start with saved cache": {
+  "seconds": 0.3,
+  "rss_mb": 684
+ },
+ "latency seconds per request (mean / max)": {
+  "greeting": "3.4 / 4.9",
+  "fact": "3.1 / 4.5",
+  "roleplay": "2.9 / 4.4",
+  "coding": "3.6 / 5.7",
+  "reasoning": "8.3 / 15.2",
+  "tools": "7.3 / 18.6",
+  "odd input": "3.8 / 8.0"
+ },
+ "rss mb: after 5th, middle, last request": [
+  779,
+  1071,
+  1071
+ ],
+ "rss growth over the run (mb)": 292,
+ "slowest requests": [
+  [
+   "tools",
+   "What time is it?",
+   18.6,
+   1599
+  ],
+  [
+   "tools",
+   "What time is it?",
+   17.9,
+   1812
+  ],
+  [
+   "reasoning",
+   "If a bat and ball cost $1.10 and the",
+   15.2,
+   1571
+  ],
+  [
+   "tools",
+   "What time is it?",
+   14.0,
+   1411
+  ],
+  [
+   "reasoning",
+   "If a bat and ball cost $1.10 and the",
+   9.4,
+   1180
+  ],
+  [
+   "tools",
+   "Set a timer for 5 minutes.",
+   8.3,
+   42
+  ],
+  [
+   "tools",
+   "What files are in my Documents folde",
+   8.2,
+   14
+  ],
+  [
+   "tools",
+   "What files are in my Documents folde",
+   8.1,
+   13
+  ],
+  [
+   "odd input",
+   "R\u00e9sum\u00e9 na\u00efve caf\u00e9 \u2014 d\u00eener \u00e0 l'\u0153uf",
+   8.0,
+   97
+  ],
+  [
+   "odd input",
+   "R\u00e9sum\u00e9 na\u00efve caf\u00e9 \u2014 d\u00eener \u00e0 l'\u0153uf",
+   7.9,
+   97
+  ]
+ ],
+ "think-tag leaks": 0,
+ "empty replies": 0,
+ "requests": 70
+}
