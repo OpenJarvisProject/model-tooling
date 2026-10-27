@@ -1,0 +1,2 @@
+alpha 0.5 bpb=0.9712
+refusals: 1/18

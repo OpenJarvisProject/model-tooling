@@ -788,6 +788,35 @@ for 0.5B) plus activations, more than the card's 8 GB and about the machine's fr
 trainer has no LoRA, so a low-memory path would need new code. Vulkan implements all the backward
 operations that trainer uses.
 
+## 17. Tweaking the uncensored 0.8B without training: blending with the regular model
+
+**Training the Qwen3.5-0.8B is not possible with llama.cpp's trainer today:** a 4-layer test slice
+stops at `ggml_compute_backward: unsupported unary op for backward pass: SIGMOID` (the gated layers
+also have no backward for the delta-rule op). Qwen2.5 models do train (section 16). So the tweak was done in weight
+space (`merge_models.py`): out = regular + alpha * (uncensored - regular), alpha 1 = the uncensored
+build unchanged (verified bit-identical).
+
+| alpha | bpb English (Q8_0, trimmed) | refusals of 18 | complied / refused (48 adult prompts, plain) | repetition |
+|---|---|---|---|---|
+| 0 (regular) | 0.9696 | 3 | 62% / 31% | 10% |
+| 0.5 | 0.9712 | 1 | 75% / 23% | 2% |
+| 0.7 | 0.9725 | 1 | 83% / 15% | 6% |
+| 0.85 | 0.9758 | 0 | 88% / 6% | 8% |
+| 1.0 | 0.9824 | 0 | 94% / 4% | 15% |
+
+With a companion persona alpha 0.85 and 1.0 both complied on 83% (this metric moves by 10-15 points
+between runs of the same model, so only the trend means anything). The blend looked like a free
+quality gain, but **it was worse at the actual tasks**: the same bundle recipe (Q5_K_M, wikitext imatrix, both probes)
+scored 43/48 and 42/48 (two runs) at alpha 0.85 against 47/48 at alpha 1.0 on the 36 original + 12 fresh agent
+scenarios; the blend loses the exact quoting of file contents (bill amount, packing list, budget).
+Shipped: alpha 1.0, `/media/ojp-models/unc-0.8b/` (Q5_K_M, 401 MB, probes next to it, sha256s listed).
+
+**Removing synonym words from the vocabulary:** each kept token costs its embedding row, 840 bytes
+at Q6_K for the 0.8B (about 700 at Q5), so dropping 3,000 words saves about 2.5 MB of 401 MB (0.6%).
+Words with several near-synonyms are mostly rare ones, which the English-corpus trimming (248k -> 48.7k
+tokens, -177 MB) has already removed. Deleting a common word's token forces it to be spelled from
+fragments (longer text, worse quality) and narrows what the model can write.
+
 ## Not yet tested
 
 - Prune → **heal** (LoRA/distillation) → quantize.
